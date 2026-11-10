@@ -4,7 +4,7 @@ class Quiz:
         self.choices = choices
         self.answer = answer
 
-quizzez = [
+quizzes = [
     Quiz("현재 작업 디렉터리를 확인하는 명령어는?", ["ls", "pwd", "cd", "mkdir"],
 2),
     Quiz("숨김 파일까지 파일 목록을 보는 명령어는?", ["ls", "ls -a", "pwd", "cp"],
@@ -49,7 +49,16 @@ while True:
     elif choice == 2 :
         print("퀴즈 추가")
     elif choice == 3 :
+        print()
+        print("-" * 40 )
         print("퀴즈 목록")
+        print("-" * 40)
+
+        if len(quizzes) == 0:
+            print("등록된 퀴즈가 없습니다.")
+        else:
+            for number,  quiz in enumerate(quizzes, start=1):
+                print(f"{number}. {quiz.question}")
     elif choice == 4 :
         print("점수 확인")
     else :
@@ -58,3 +67,4 @@ while True:
 
 
 
+ 
