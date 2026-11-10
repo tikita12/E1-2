@@ -7,9 +7,15 @@ class Quiz:
 def get_number(prompt):
     while True:
         try:
-            return int(input(prompt).strip())
+            number = int(input(prompt).strip())
         except ValueError:
             print("숫자를 입력해 주세요.")
+            continue
+
+        if number in [1, 2, 3, 4 ]:
+            return number
+        
+        print("1~4 사이의 번호를 입력해주세요")
 
 def play_quiz(current_quiz):
     print()
