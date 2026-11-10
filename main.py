@@ -4,6 +4,27 @@ class Quiz:
         self.choices = choices
         self.answer = answer
 
+def get_number(prompt):
+    while True:
+        try:
+             return int(input(prompt).strip())
+        except ValueError:
+            print("숫자를 입력해 주세요.")
+
+def play_quiz(current_quiz):
+    print()
+    print(current_quiz.question)
+
+    for number, choice in enumerate(current_quiz.choices, start=1):
+        print(f"{number}, {choice}")
+
+    answer = get_number("정답 번호를 입력하세요: ")
+
+    if answer == current_quiz.answer:
+        print("정답입니다")
+    else:
+        print(f"오답입니다. 정답은 {current_quiz.answer}번입니다.")
+
 quizzes = [
     Quiz("현재 작업 디렉터리를 확인하는 명령어는?", ["ls", "pwd", "cd", "mkdir"],
 2),
@@ -45,7 +66,11 @@ while True:
         print(">>게임을 종료합니다.")
         break
     elif choice == 1 :
-        print("퀴즈 풀기")
+        if len(quizzes) == 0:  ##len 목록에 들어있는 항목 수를 알려주는 함수
+            print("등록된 퀴즈가 없습니다.")
+        else:
+            for current_quiz in quizzes:
+                play_quiz(current_quiz)
     elif choice == 2 :
         print("퀴즈 추가")
     elif choice == 3 :
