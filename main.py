@@ -7,7 +7,7 @@ class Quiz:
 def get_number(prompt):
     while True:
         try:
-             return int(input(prompt).strip())
+            return int(input(prompt).strip())
         except ValueError:
             print("숫자를 입력해 주세요.")
 
@@ -22,8 +22,10 @@ def play_quiz(current_quiz):
 
     if answer == current_quiz.answer:
         print("정답입니다")
+        return True
     else:
         print(f"오답입니다. 정답은 {current_quiz.answer}번입니다.")
+        return False
 
 quizzes = [
     Quiz("현재 작업 디렉터리를 확인하는 명령어는?", ["ls", "pwd", "cd", "mkdir"],
@@ -33,6 +35,47 @@ quizzes = [
     Quiz("파일을 복사하는 명령어는?", ["mv", "rm", "cp", "cat"], 3),
     Quiz("파일 권한을 변경하는 명령어는?", ["chown", "chmod", "touch", "grep"], 2),
     Quiz("변경 내용을 스테이징 영역에 올리는 Git 명령어는?", ["git push", "git add", "git log", "git pull"], 2),
+ Quiz(
+        "input()으로 받은 값의 기본 자료형은?",
+        ["정수 int", "문자열 str", "실수 float", "불리언 bool"],
+        2
+    ),
+    Quiz(
+        "문자열의 앞뒤 공백을 제거하는 메서드는?",
+        ["split()", "append()", "strip()", "replace()"],
+        3
+    ),
+    Quiz(
+        'int("3")의 결과는?',
+        ["정수 3", '문자열 "3"', "True", "오류 발생"],
+        1
+    ),
+    Quiz(
+        'int("abc")를 실행하면 발생하는 오류는?',
+        ["NameError", "TabError", "SyntaxError", "ValueError"],
+        4
+    ),
+    Quiz(
+        "함수를 정의할 때 사용하는 키워드는?",
+        ["class", "def", "return", "for"],
+        2
+    ),
+    Quiz(
+        "함수를 끝내고 호출한 곳으로 값을 돌려주는 키워드는?",
+        ["print", "break", "return", "continue"],
+        3
+    ),
+    Quiz(
+        "퀴즈 객체 5개가 담긴 quizzes에서 len(quizzes)의 결과는?",
+        ["5", "4", "첫 번째 퀴즈", "마지막 퀴즈"],
+        1
+    ),
+    Quiz(
+        "if result == True: 안쪽 코드는 언제 실행될까?",
+        ["항상 실행된다", "result가 False일 때", "반복이 끝난 뒤", "result가 True일 때"],
+        4
+    ),
+
 ]
 
 def get_menu_choice():
@@ -69,8 +112,16 @@ while True:
         if len(quizzes) == 0:  ##len 목록에 들어있는 항목 수를 알려주는 함수
             print("등록된 퀴즈가 없습니다.")
         else:
+            correct_count = 0
+
             for current_quiz in quizzes:
-                play_quiz(current_quiz)
+                result = play_quiz(current_quiz)
+ 
+                if result == True:
+                    correct_count += 1
+    
+            print(f"결과: {len(quizzes)}문제 중 {correct_count}문제 정답")
+
     elif choice == 2 :
         print("퀴즈 추가")
     elif choice == 3 :
