@@ -33,6 +33,23 @@ def play_quiz(current_quiz):
         print(f"오답입니다. 정답은 {current_quiz.answer}번입니다.")
         return False
 
+def add_quiz():
+    new_question = input("새 문제를 입력하세요: ").strip()
+    new_choices = []
+
+    for number in range(1,5):
+        text = input(f"선택지 {number}: ").strip()
+        new_choices.append(text)
+
+    new_answer = get_number("정답 번호를 입력하세요 : ")
+
+    new_quiz = Quiz(new_question, new_choices, new_answer)
+    quizzes.append(new_quiz)
+
+    print("퀴즈가 추가되었습니다.")
+
+
+
 quizzes = [
     Quiz("현재 작업 디렉터리를 확인하는 명령어는?", ["ls", "pwd", "cd", "mkdir"],
 2),
@@ -129,7 +146,7 @@ while True:
             print(f"결과: {len(quizzes)}문제 중 {correct_count}문제 정답")
 
     elif choice == 2 :
-        print("퀴즈 추가")
+        add_quiz()
     elif choice == 3 :
         print()
         print("-" * 40 )
