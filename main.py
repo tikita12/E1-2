@@ -39,12 +39,21 @@ def play_quiz(current_quiz):
         print(f"오답입니다. 정답은 {current_quiz.answer}번입니다.")
         return False
 
+def get_text(prompt):
+    while True:
+        text = input(prompt).strip()
+
+        if text:
+            return text
+
+        print("내용을 입력해주세요.")
+
 def add_quiz():
-    new_question = input("새 문제를 입력하세요: ").strip()
+    new_question = get_text("새 문제를 입력하세요: ").strip()
     new_choices = []
 
     for number in range(1,5):
-        text = input(f"선택지 {number}: ").strip()
+        text = get_text(f"선택지 {number}: ").strip()
         new_choices.append(text)
 
     new_answer = get_number("정답 번호를 입력하세요 : ")
