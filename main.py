@@ -48,7 +48,7 @@ def get_text(prompt):
 
         print("내용을 입력해주세요.")
 
-def add_quiz():
+def add_quiz(quizzes):
     new_question = get_text("새 문제를 입력하세요: ").strip()
     new_choices = []
 
@@ -174,6 +174,10 @@ def get_menu_choice():
 
 
 class QuizGame:
+    def __init__(self, quizzes, best_score): #퀴즈목록, 최고점수
+        self.quizzes = quizzes
+        self.best_score = best_score
+
     def show_menu(self):
         print()
         print("=" * 40)
@@ -187,7 +191,7 @@ class QuizGame:
         print("-" * 40)
 
 quizzes, best_score = load_state(quizzes)
-game = QuizGame()
+game = QuizGame(quizzes, best_score)
 
 while True:
     game.show_menu()
@@ -195,32 +199,33 @@ while True:
     choice = get_menu_choice()
 
     if choice == 5 :
-        save_state(quizzes, best_score)
+        save_state(game.quizzes, game.best_score)
         print(">>게임을 종료합니다.")
         break
     elif choice == 1 :
-        if len(quizzes) == 0:  ##len 목록에 들어있는 항목 수를 알려주는 함수
+        if len(game.quizzes) == 0:  ##len 목록에 들어있는 항목 수를 알려주는 함수
             print("등록된 퀴즈가 없습니다.")
         else:
             correct_count = 0
 
-            for current_quiz in quizzes:
+            for current_quiz in game.quizzes:
                 result = play_quiz(current_quiz)
  
                 if result == True:
                     correct_count += 1
     
-            print(f"결과: {len(quizzes)}문제 중 {correct_count}문제 정답")
+            print(f"결과: {len(game.quizzes)}문제 중 {correct_count}문제 정답")
 
-            score = round(correct_count / len(quizzes) * 100)
+            score = round(correct_count / len(game.quizzes) * 100)
             print(f"이번 점수: {score}점")
 
-            if best_score is None or score > best_score:
-                best_score = score
+
+            if game.best_score is None or score > game.best_score:
+                game.best_score = score
                 print("최고 점수가 갱신되었습니다!")
 
     elif choice == 2 :
-        add_quiz()
+        add_quiz(game.quizzes)
     elif choice == 3 :
         print()
         print("-" * 40 )
@@ -230,10 +235,10 @@ while True:
         if len(quizzes) == 0:
             print("등록된 퀴즈가 없습니다.")
         else:
-            for number,  quiz in enumerate(quizzes, start=1):
+            for number,  quiz in enumerate(game.quizzes, start=1):
                 print(f"{number}. {quiz.question}")
     elif choice == 4 :
-        bestscore(best_score)
+        bestscore(game.best_score)
     else :
         print(">>선택한 기능은 준비 중 입니다..")
 
