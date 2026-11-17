@@ -4,7 +4,7 @@ from pathlib import Path
 
 STATE_FILE = Path(__file__).resolve().parent / "state.json"
 
-class Quiz:
+class Quiz: #문제의 정보를 관리하는 클래스
     def __init__(self, question, choices, answer):
         self.question = question
         self.choices = choices
@@ -172,19 +172,25 @@ def get_menu_choice():
 
         print("1~5 사이의 번호를 입력해 주세요.")
 
+
+class QuizGame:
+    def show_menu(self):
+        print()
+        print("=" * 40)
+        print("<나만의 시험 대비 퀴즈>")
+        print("=" * 40)
+        print(" [1]. 퀴즈 풀기")
+        print(" [2]. 퀴즈 추가")
+        print(" [3]. 퀴즈 목록")
+        print(" [4]. 점수 확인")
+        print(" [5]. 종료")
+        print("-" * 40)
+
 quizzes, best_score = load_state(quizzes)
+game = QuizGame()
 
 while True:
-    print()
-    print("=" * 40)
-    print("<나만의 시험 대비 퀴즈>")
-    print("=" * 40)
-    print(" [1]. 퀴즈 풀기")
-    print(" [2]. 퀴즈 추가")
-    print(" [3]. 퀴즈 목록")
-    print(" [4]. 점수 확인")
-    print(" [5]. 종료")
-    print("-" * 40)
+    game.show_menu()
 
     choice = get_menu_choice()
 
