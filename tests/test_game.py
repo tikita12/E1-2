@@ -55,19 +55,37 @@ class GameTests(unittest.TestCase):
         self.assertIn("6. 새 문제", self.run_game("3\n5\n"))
 
     def test_score_and_lower_score(self):
-        answers = "\n".join(str(q.answer) for q in main.quizzes)
+        self.seed_same_answer_quizzes()
+        answers = "\n".join("1" for q in main.quizzes)
         self.run_game("1\n" + answers + "\n4\n5\n")
         self.assertEqual(self.read_state()["best_score"], 100)
-        wrong = "\n".join(str(q.answer % 4 + 1) for q in main.quizzes)
+        wrong = "\n".join("2" for q in main.quizzes)
         output = self.run_game("1\n" + wrong + "\n4\n5\n")
         self.assertIn("이번 점수: 0점", output)
         self.assertIn("최고 점수: 100점", output)
         self.assertEqual(self.read_state()["best_score"], 100)
 
     def test_first_zero_score_is_not_unplayed(self):
-        wrong = "\n".join(str(q.answer % 4 + 1) for q in main.quizzes)
+        self.seed_same_answer_quizzes()
+        wrong = "\n".join("2" for q in main.quizzes)
         self.run_game("1\n" + wrong + "\n5\n")
         self.assertIn("최고 점수: 0점", self.run_game("4\n5\n"))
+
+    def seed_same_answer_quizzes(self):
+        data = {"quizzes": [{"question": q.question, "choices": q.choices, "answer": 1} for q in main.quizzes], "best_score": None}
+        self.state.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    def test_shuffled_play_preserves_original_and_saved_order(self):
+        original = main.quizzes.copy()
+        game = main.QuizGame(original.copy(), None)
+        with patch("main.STATE_FILE", self.state), contextlib.redirect_stdout(io.StringIO()), patch("main.random.shuffle", side_effect=lambda order: order.reverse()) as shuffle, patch("main.play_quiz", return_value=True) as play:
+            game.play()
+            self.assertEqual([call.args[0] for call in play.call_args_list], original[::-1])
+            self.assertEqual(game.quizzes, original)
+            self.assertEqual([q["question"] for q in self.read_state()["quizzes"]], [q.question for q in original])
+            self.assertEqual(game.best_score, 100)
+            game.play()
+            self.assertEqual(shuffle.call_count, 2)
 
     def test_empty_quizzes(self):
         self.state.write_text('{"quizzes": [], "best_score": null}', encoding="utf-8")

@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+import random
 from pathlib import Path
 
 STATE_FILE = Path(__file__).resolve().parent / "state.json"
@@ -216,7 +217,10 @@ class QuizGame:
 
         correct_count = 0
 
-        for current_quiz in self.quizzes:
+        play_order = self.quizzes.copy()
+        random.shuffle(play_order)
+
+        for current_quiz in play_order:
             result = play_quiz(current_quiz)
 
             if result:
