@@ -119,10 +119,43 @@ def save_state(quizzes, best_score):
     else:
         print("퀴즈와 최고 점수를 저장했습니다.")
 
+def validate_state(data):
+    if not isinstance(data, dict):
+        raise ValueError("저장 데이터는 딕셔너리여야 합니다.")
+
+    if not isinstance(data.get("quizzes"), list):
+        raise ValueError("퀴즈 목록은 리스트여야 합니다.")
+
+    for item in data["quizzes"]:
+        if not isinstance(item, dict):
+            raise ValueError("각 퀴즈는 딕셔너리여야 합니다.")
+
+        question = item.get("question")
+        if not isinstance(question, str) or not question.strip():
+            raise ValueError("문제는 비어 있지 않은 문자열이어야 합니다.")
+
+        choices = item.get("choices")
+        if not isinstance(choices, list) or len(choices) != 4:
+            raise ValueError("선택지는 4개여야 합니다.")
+
+        for choice in choices:
+            if not isinstance(choice, str) or not choice.strip():
+                raise ValueError("선택지는 비어 있지 않은 문자열이어야 합니다.")
+
+        answer = item.get("answer")
+        if type(answer) is not int or not 1 <= answer <= 4:
+            raise ValueError("정답 번호는 1~4 사이의 정수여야 합니다.")
+
+    best_score = data["best_score"]
+    if best_score is not None:
+        if type(best_score) is not int or not 0 <= best_score <= 100:
+            raise ValueError("최고 점수는 0~100 사이의 정수여야 합니다.")
+
 def load_state(default_quizzes):
     try:
         with open(STATE_FILE, "r", encoding="utf-8") as file:
             data = json.load(file)
+        validate_state(data)
 
         loaded_quizzes = []
 
@@ -140,8 +173,9 @@ def load_state(default_quizzes):
         print("저장 파일이 없어 기본 퀴즈로 시작합니다.")
         return default_quizzes, None
 
-    except (json.JSONDecodeError, UnicodeDecodeError, KeyError, TypeError):
-        print("저장 데이터에 문제가 있어 기본 퀴즈로 시작합니다.")
+    except (ValueError, KeyError, TypeError) as error:
+        print(f"저장 데이터에 문제가 있습니다: {error}")
+        print("기본 퀴즈로 시작합니다.")
         return default_quizzes, None
 
     except OSError as error:
