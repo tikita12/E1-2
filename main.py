@@ -1,4 +1,4 @@
-
+from datetime import datetime
 import json
 from pathlib import Path
 
@@ -97,6 +97,16 @@ quizzes = [
 ]
 
 def save_state(quizzes, best_score):
+    try:
+        with open(STATE_FILE, "r", encoding="utf-8") as file:
+            existing_data = json.load(file)
+        validate_state(existing_data)
+    except FileNotFoundError:
+        pass
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        print(f"기존 파일을 보호하기 위해 저장을 중단합니다: {error}")
+        return
+    
     quiz_data = []
 
     for quiz in quizzes:
@@ -150,6 +160,19 @@ def validate_state(data):
     if best_score is not None:
         if type(best_score) is not int or not 0 <= best_score <= 100:
             raise ValueError("최고 점수는 0~100 사이의 정수여야 합니다.")
+def backup_corrupt_state():
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S-%f")
+    backup_path = STATE_FILE.with_name(
+        f"state.corrupt-{timestamp}.json"
+    )
+
+    try:
+        STATE_FILE.rename(backup_path)
+    except OSError as error:
+        print(f"손상 파일 보관에 실패했습니다: {error}")
+    else:
+        print(f"손상 파일을 보관했습니다: {backup_path.name}")
+
 
 def load_state(default_quizzes):
     try:
@@ -175,6 +198,7 @@ def load_state(default_quizzes):
 
     except (ValueError, KeyError, TypeError) as error:
         print(f"저장 데이터에 문제가 있습니다: {error}")
+        backup_corrupt_state()
         print("기본 퀴즈로 시작합니다.")
         return default_quizzes, None
 
