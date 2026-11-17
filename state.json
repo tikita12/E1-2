@@ -1,0 +1,95 @@
+{
+    "quizzes": [
+        {
+            "question": "현재 작업 디렉터리를 확인하는 명령어는?",
+            "choices": [
+                "ls",
+                "pwd",
+                "cd",
+                "mkdir"
+            ],
+            "answer": 2
+        },
+        {
+            "question": "숨김 파일까지 파일 목록을 보는 명령어는?",
+            "choices": [
+                "ls",
+                "ls -a",
+                "pwd",
+                "cp"
+            ],
+            "answer": 2
+        },
+        {
+            "question": "파일을 복사하는 명령어는?",
+            "choices": [
+                "mv",
+                "rm",
+                "cp",
+                "cat"
+            ],
+            "answer": 3
+        },
+        {
+            "question": "파일 권한을 변경하는 명령어는?",
+            "choices": [
+                "chown",
+                "chmod",
+                "touch",
+                "grep"
+            ],
+            "answer": 2
+        },
+        {
+            "question": "변경 내용을 스테이징 영역에 올리는 Git 명령어는?",
+            "choices": [
+                "git push",
+                "git add",
+                "git log",
+                "git pull"
+            ],
+            "answer": 2
+        },
+        {
+            "question": "input()으로 받은 값의 기본 자료형은?",
+            "choices": [
+                "정수 int",
+                "문자열 str",
+                "실수 float",
+                "불리언 bool"
+            ],
+            "answer": 2
+        },
+        {
+            "question": "문자열의 앞뒤 공백을 제거하는 메서드는?",
+            "choices": [
+                "split()",
+                "append()",
+                "strip()",
+                "replace()"
+            ],
+            "answer": 3
+        },
+        {
+            "question": "int(\"3\")의 결과는?",
+            "choices": [
+                "정수 3",
+                "문자열 \"3\"",
+                "True",
+                "오류 발생"
+            ],
+            "answer": 1
+        },
+        {
+            "question": "int(\"abc\")를 실행하면 발생하는 오류는?",
+            "choices": [
+                "NameError",
+                "TabError",
+                "SyntaxError",
+                "ValueError"
+            ],
+            "answer": 4
+        }
+    ],
+    "best_score": 11
+}

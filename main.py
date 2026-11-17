@@ -1,3 +1,9 @@
+
+import json
+from pathlib import Path
+
+STATE_FILE = Path(__file__).resolve().parent / "state.json"
+
 class Quiz:
     def __init__(self, question, choices, answer):
         self.question = question
@@ -81,6 +87,29 @@ quizzes = [
 
 ]
 
+def save_state(quizzes, best_score):
+    quiz_data = []
+
+    for quiz in quizzes:
+        quiz_data.append({
+            "question": quiz.question,
+            "choices": quiz.choices,
+            "answer": quiz.answer
+
+        })
+    data = {
+        "quizzes": quiz_data,
+        "best_score": best_score
+    }
+
+    try:
+        with open(STATE_FILE, "w", encoding="utf-8") as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
+    except OSError as error:
+        print(f"저장에 실패했습니다: {error}")
+    else:
+        print("퀴즈와 최고 점수를 저장했습니다.")
+
 def bestscore(best_score):
     if best_score is None:
         print("아직 퀴즈를 풀지 않았습니다.")
@@ -118,6 +147,7 @@ while True:
     choice = get_menu_choice()
 
     if choice == 5 :
+        save_state(quizzes, best_score)
         print(">>게임을 종료합니다.")
         break
     elif choice == 1 :
