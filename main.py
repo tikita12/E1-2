@@ -10,6 +10,17 @@ class Quiz: #문제의 정보를 관리하는 클래스
         self.choices = choices
         self.answer = answer
 
+    def display(self):
+        print()
+        print(self.question)
+
+        for number, choice in enumerate(self.choices, start=1):
+            print(f"{number}. {choice}")
+
+    def check_answer(self, user_answer):
+        return user_answer == self.answer
+
+
 def get_number(prompt):
     while True:
         try:
@@ -24,15 +35,11 @@ def get_number(prompt):
         print("1~4 사이의 번호를 입력해주세요")
 
 def play_quiz(current_quiz):
-    print()
-    print(current_quiz.question)
-
-    for number, choice in enumerate(current_quiz.choices, start=1):
-        print(f"{number}, {choice}")
+    current_quiz.display()
 
     answer = get_number("정답 번호를 입력하세요: ")
 
-    if answer == current_quiz.answer:
+    if current_quiz.check_answer(answer):
         print("정답입니다")
         return True
     else:
