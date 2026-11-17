@@ -190,6 +190,28 @@ class QuizGame:
         print(" [5]. 종료")
         print("-" * 40)
 
+    def play(self):
+        if len(self.quizzes) == 0:
+            print("등록된 퀴즈가 없습니다.")
+            return
+
+        correct_count = 0
+
+        for current_quiz in self.quizzes:
+            result = play_quiz(current_quiz)
+
+            if result:
+                correct_count += 1
+
+        print(f"결과: {len(self.quizzes)}문제 중 {correct_count}문제 정답")
+
+        score = round(correct_count / len(self.quizzes) * 100)
+        print(f"이번 점수: {score}점")
+
+        if self.best_score is None or score > self.best_score:
+            self.best_score = score
+            print("최고 점수가 갱신되었습니다!")
+
 quizzes, best_score = load_state(quizzes)
 game = QuizGame(quizzes, best_score)
 
@@ -203,27 +225,7 @@ while True:
         print(">>게임을 종료합니다.")
         break
     elif choice == 1 :
-        if len(game.quizzes) == 0:  ##len 목록에 들어있는 항목 수를 알려주는 함수
-            print("등록된 퀴즈가 없습니다.")
-        else:
-            correct_count = 0
-
-            for current_quiz in game.quizzes:
-                result = play_quiz(current_quiz)
- 
-                if result == True:
-                    correct_count += 1
-    
-            print(f"결과: {len(game.quizzes)}문제 중 {correct_count}문제 정답")
-
-            score = round(correct_count / len(game.quizzes) * 100)
-            print(f"이번 점수: {score}점")
-
-
-            if game.best_score is None or score > game.best_score:
-                game.best_score = score
-                print("최고 점수가 갱신되었습니다!")
-
+        game.play()
     elif choice == 2 :
         add_quiz(game.quizzes)
     elif choice == 3 :
@@ -232,7 +234,7 @@ while True:
         print("퀴즈 목록")
         print("-" * 40)
 
-        if len(quizzes) == 0:
+        if len(game.quizzes) == 0:
             print("등록된 퀴즈가 없습니다.")
         else:
             for number,  quiz in enumerate(game.quizzes, start=1):
