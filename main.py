@@ -212,8 +212,46 @@ class QuizGame:
             self.best_score = score
             print("최고 점수가 갱신되었습니다!")
 
+    def run(self):
+        try:
+            while True:
+                self.show_menu()
+                choice = get_menu_choice()
+
+                if choice == 5:
+                    break
+                elif choice == 1:
+                    self.play()
+                elif choice == 2:
+                    add_quiz(self.quizzes)
+                elif choice == 3:
+                    print()
+                    print("-" * 40)
+                    print("퀴즈 목록")
+                    print("-" * 40)
+
+                    if len(self.quizzes) == 0:
+                        print("등록된 퀴즈가 없습니다.")
+                    else:
+                        for number, quiz in enumerate(self.quizzes, start=1):
+                            print(f"{number}. {quiz.question}")
+
+                elif choice == 4:
+                    bestscore(self.best_score)
+
+        except KeyboardInterrupt:
+            print("\nCtrl+C로 종료를 요청했습니다.")
+
+        except EOFError:
+            print("\n입력이 종료되어 게임을 종료합니다.")
+
+        finally:
+            save_state(self.quizzes, self.best_score)
+            print(">>게임을 종료합니다.")    
+
 quizzes, best_score = load_state(quizzes)
 game = QuizGame(quizzes, best_score)
+game.run()
 
 while True:
     game.show_menu()
