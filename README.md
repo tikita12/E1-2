@@ -54,7 +54,7 @@ E1-2/
     ├── execution.md         # 실제 프로그램 입력·출력
     ├── environment.md       # 실행 환경과 Git 정보
     ├── git-practice.md      # clone/pull 실습 기록
-    └── screenshots/README.md # 직접 캡처할 화면과 절차
+    └── screenshots/README.md # 실제 실행 화면과 캡처 방법
 ```
 
 학습용 코드는 한 파일에서 읽되 역할별 함수·클래스로 분리했습니다. 검증과 제출 증거는 별도 폴더로 분리했습니다. 기존 과제 PDF와 `_Tp` 파일은 실행에 사용하지 않습니다.
@@ -151,7 +151,29 @@ python3 tools/benchmark.py
 
 ## 제출 자료
 
-이미지를 제외하는 AI 사전평가에서도 읽을 수 있도록 코드와 마크다운 실행 기록을 함께 제출합니다. 과제에서 별도로 요구한 화면 캡처는 [스크린샷 준비 절차](docs/screenshots/README.md)에 따라 첨부해야 합니다.
+이미지를 제외하는 AI 사전평가에서도 읽을 수 있도록 코드와 마크다운 실행 기록을 함께 제출합니다. 실제 콘솔 창에서 촬영한 [스크린샷 6장](docs/screenshots/README.md)을 첨부했습니다. 자동 입력을 사용했으며 기존 저장 데이터는 변경하지 않았습니다.
 
 Git 실습 메모: 이 문장은 별도로 clone한 저장소에서 README를 수정하는 실습으로 추가했습니다.
 
+
+## 실행 화면
+
+### 메뉴
+
+![메뉴](docs/screenshots/menu.png)
+
+### 퀴즈 추가와 목록
+
+![퀴즈 추가](docs/screenshots/add.png)
+
+![퀴즈 목록](docs/screenshots/list.png)
+
+### 플레이 결과와 재실행 점수
+
+![플레이 결과](docs/screenshots/play.png)
+
+![재실행 후 최고 점수](docs/screenshots/score.png)
+
+### 개발 환경과 Git 병합 기록
+
+![개발 환경과 Git 그래프](docs/screenshots/environment.png)

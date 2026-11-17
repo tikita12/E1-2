@@ -1,32 +1,14 @@
-# 제출용 화면 캡처
+# 실제 실행 화면
 
-아직 실제 화면 스크린샷은 없다. 실행 로그는 `docs/execution.md`, 환경·Git 기록은 `docs/environment.md`에 준비했다. 아래 화면은 사용자의 터미널/편집기에서 직접 캡처해 추가해야 한다. 로그를 이미지로 꾸며 실제 스크린샷으로 대신하지 않는다.
+Windows 콘솔 호스트에서 WSL의 Python 프로그램을 실제로 실행하고 창 자체를 캡처했습니다. 이미지 내용을 열어 확인했습니다. 자동 입력을 표준 입력으로 전달했으므로 입력한 글자는 콘솔에 별도로 에코되지 않습니다. 임시 폴더의 main.py 복사본과 별도 state.json을 사용했으며 사용자 저장 데이터는 변경하지 않았습니다.
 
-## 캡처 순서
+| 화면 | 증거 |
+|---|---|
+| [메뉴](menu.png) | 저장 파일 없는 첫 실행과 종료 |
+| [추가](add.png) | 새 퀴즈 등록 및 저장 완료 |
+| [목록](list.png) | 기본 5개와 추가한 문제 1개 |
+| [플레이](play.png) | 6문제 정답 결과와 최고점 갱신 |
+| [재실행 점수](score.png) | 새 프로세스에서 저장된 100점 불러오기 |
+| [환경·Git](environment.png) | Python/Git/WSL 버전과 실제 커밋 그래프 |
 
-1. `environment.png`: 편집기에서 프로젝트를 연 화면과 터미널의 `python3 --version`, `git --version`, `git config user.name` 결과. 공개하지 않을 이메일·토큰은 제외한다.
-2. `menu.png`: `python3 main.py` 실행 후 메뉴.
-3. `add_quiz.png`: 2번 문제·선택지 4개·정답 입력과 등록·저장 완료.
-4. `list.png`: 3번에서 추가한 문제까지 표시한 목록.
-5. `play.png`: 1번의 정오답 안내와 전체 문제 풀이 결과.
-6. `score.png`: 4번 최고 점수.
-7. `restart.png`: 5번 종료 후 재실행하여 추가한 문제와 점수가 남은 화면.
-8. `git_graph.png`: `git log --oneline --graph --all -20` 결과.
-9. `clone_pull.png`: 실제 실습 로그 확인 화면. 명령 실행 당시 화면을 요구하면 `docs/git-practice.md` 절차를 별도 폴더에서 다시 수행하며 캡처한다.
-
-Windows/WSL에서는 `Win + Shift + S`로 영역을 캡처할 수 있다. 파일을 이 폴더에 저장한 뒤 제출 저장소에 반영한다.
-
-```bash
-git add docs/screenshots
-git commit -m "문서: 개발 환경과 프로그램 실행 화면 첨부"
-git push origin main
-```
-
-## 제출 전 확인
-
-- [ ] 개발 환경 화면
-- [ ] 추가·목록·플레이·점수·재실행 화면
-- [ ] Git 그래프 화면
-- [ ] 저장소 URL과 main 브랜치 확인
-
-이미지를 평가하지 않는 AI 사전평가를 위해 마크다운 실행 기록도 함께 유지한다.
+캡처 시점의 커밋은 38993b5입니다. 스크린샷 첨부 커밋은 이후에 추가됩니다. 화면 캡처에는 Windows 창 API를 사용했으며 결과 텍스트를 그림으로 합성하지 않았습니다. 실행 입력·상세 출력과 clone/pull 증거는 상위 폴더의 execution.md와 git-practice.md에서도 확인할 수 있습니다.

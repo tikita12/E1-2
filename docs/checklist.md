@@ -27,6 +27,6 @@
 
 - 저장소: https://github.com/tikita12/E1-2 / main
 - 환경·실행·Git 그래프 텍스트 증거: docs의 각 문서
-- **실제 화면 스크린샷은 아직 필요**: screenshots/README.md의 목록을 따라 추가
+- **실제 콘솔 스크린샷 6장 첨부 완료**: screenshots/README.md에서 확인
 
 손상 파일 보관은 이전 정상 버전으로 자동 복원하는 기능과 다르다. 정상 파일의 주기적 백업·원자적 저장은 구현하지 않았으며 README에 한계를 명시했다.
