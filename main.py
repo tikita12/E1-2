@@ -299,7 +299,8 @@ class QuizGame:
             self.save()
             print(">>게임을 종료합니다.")
 
-game = QuizGame(quizzes, None)
-game.load()
-game.run()
+if __name__ == "__main__":
+    game = QuizGame(quizzes, None)
+    game.load()
+    game.run()
 
