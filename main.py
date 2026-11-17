@@ -110,6 +110,39 @@ def save_state(quizzes, best_score):
     else:
         print("퀴즈와 최고 점수를 저장했습니다.")
 
+def load_state(default_quizzes):
+    try:
+        with open(STATE_FILE, "r", encoding="utf-8") as file:
+            data = json.load(file)
+
+        loaded_quizzes = []
+
+        for item in data["quizzes"]:
+            quiz = Quiz(
+                item["question"],
+                item["choices"],
+                item["answer"]
+            )
+            loaded_quizzes.append(quiz)
+
+        loaded_best_score = data["best_score"]
+
+    except FileNotFoundError:
+        print("저장 파일이 없어 기본 퀴즈로 시작합니다.")
+        return default_quizzes, None
+
+    except (json.JSONDecodeError, UnicodeDecodeError, KeyError, TypeError):
+        print("저장 데이터에 문제가 있어 기본 퀴즈로 시작합니다.")
+        return default_quizzes, None
+
+    except OSError as error:
+        print(f"파일을 읽을 수 없습니다: {error}")
+        return default_quizzes, None
+
+    else:
+        print("저장된 퀴즈와 최고 점수를 불러왔습니다.")
+        return loaded_quizzes, loaded_best_score
+
 def bestscore(best_score):
     if best_score is None:
         print("아직 퀴즈를 풀지 않았습니다.")
@@ -130,7 +163,7 @@ def get_menu_choice():
 
         print("1~5 사이의 번호를 입력해 주세요.")
 
-best_score = None
+quizzes, best_score = load_state(quizzes)
 
 while True:
     print()
