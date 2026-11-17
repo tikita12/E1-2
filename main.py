@@ -55,51 +55,12 @@ def get_text(prompt):
 
         print("내용을 입력해주세요.")
 
-def add_quiz(quizzes):
-    new_question = get_text("새 문제를 입력하세요: ").strip()
-    new_choices = []
-
-    for number in range(1,5):
-        text = get_text(f"선택지 {number}: ").strip()
-        new_choices.append(text)
-
-    new_answer = get_number("정답 번호를 입력하세요 : ")
-
-    new_quiz = Quiz(new_question, new_choices, new_answer)
-    quizzes.append(new_quiz)
-
-    print("퀴즈가 추가되었습니다.")
-
-
-
 quizzes = [
-    Quiz("현재 작업 디렉터리를 확인하는 명령어는?", ["ls", "pwd", "cd", "mkdir"],
-2),
-    Quiz("숨김 파일까지 파일 목록을 보는 명령어는?", ["ls", "ls -a", "pwd", "cp"],
-2),
+    Quiz("현재 작업 디렉터리를 확인하는 명령어는?", ["ls", "pwd", "cd", "mkdir"], 2),
+    Quiz("숨김 파일까지 파일 목록을 보는 명령어는?", ["ls", "ls -a", "pwd", "cp"], 2),
     Quiz("파일을 복사하는 명령어는?", ["mv", "rm", "cp", "cat"], 3),
     Quiz("파일 권한을 변경하는 명령어는?", ["chown", "chmod", "touch", "grep"], 2),
     Quiz("변경 내용을 스테이징 영역에 올리는 Git 명령어는?", ["git push", "git add", "git log", "git pull"], 2),
- Quiz(
-        "input()으로 받은 값의 기본 자료형은?",
-        ["정수 int", "문자열 str", "실수 float", "불리언 bool"],
-        2
-    ),
-    Quiz(
-        "문자열의 앞뒤 공백을 제거하는 메서드는?",
-        ["split()", "append()", "strip()", "replace()"],
-        3
-    ),
-    Quiz(
-        'int("3")의 결과는?',
-        ["정수 3", '문자열 "3"', "True", "오류 발생"],
-        1
-    ),
-    Quiz(
-        'int("abc")를 실행하면 발생하는 오류는?',
-        ["NameError", "TabError", "SyntaxError", "ValueError"],
-        4
-    ),
 
 ]
 
@@ -217,13 +178,6 @@ def load_state(default_quizzes):
         print("저장된 퀴즈와 최고 점수를 불러왔습니다.")
         return loaded_quizzes, loaded_best_score
 
-def bestscore(best_score):
-    if best_score is None:
-        print("아직 퀴즈를 풀지 않았습니다.")
-    else:
-        print(f"최고점수 {best_score}점")
-
-
 def get_menu_choice():
     while True:
         try:
@@ -277,6 +231,47 @@ class QuizGame:
             self.best_score = score
             print("최고 점수가 갱신되었습니다!")
 
+        self.save()
+
+    def add_quiz(self):
+        question = get_text("새 문제를 입력하세요: ")
+        choices = []
+
+        for number in range(1, 5):
+            choice = get_text(f"선택지 {number}: ")
+            choices.append(choice)
+
+        answer = get_number("정답 번호를 입력하세요: ")
+
+        self.quizzes.append(Quiz(question, choices, answer))
+        print("퀴즈가 추가되었습니다.")
+        self.save()
+
+    def show_list(self):
+        print()
+        print("-" * 40)
+        print("퀴즈 목록")
+        print("-" * 40)
+
+        if len(self.quizzes) == 0:
+            print("등록된 퀴즈가 없습니다.")
+            return
+
+        for number, quiz in enumerate(self.quizzes, start=1):
+            print(f"{number}. {quiz.question}")
+
+    def show_score(self):
+        if self.best_score is None:
+            print("아직 퀴즈를 풀지 않았습니다.")
+        else:
+            print(f"최고 점수: {self.best_score}점")
+
+    def save(self):
+        save_state(self.quizzes, self.best_score)
+
+    def load(self):
+        self.quizzes, self.best_score = load_state(self.quizzes)
+
     def run(self):
         try:
             while True:
@@ -288,21 +283,11 @@ class QuizGame:
                 elif choice == 1:
                     self.play()
                 elif choice == 2:
-                    add_quiz(self.quizzes)
+                    self.add_quiz()
                 elif choice == 3:
-                    print()
-                    print("-" * 40)
-                    print("퀴즈 목록")
-                    print("-" * 40)
-
-                    if len(self.quizzes) == 0:
-                        print("등록된 퀴즈가 없습니다.")
-                    else:
-                        for number, quiz in enumerate(self.quizzes, start=1):
-                            print(f"{number}. {quiz.question}")
-
+                    self.show_list()
                 elif choice == 4:
-                    bestscore(self.best_score)
+                    self.show_score()
 
         except KeyboardInterrupt:
             print("\nCtrl+C로 종료를 요청했습니다.")
@@ -311,10 +296,10 @@ class QuizGame:
             print("\n입력이 종료되어 게임을 종료합니다.")
 
         finally:
-            save_state(self.quizzes, self.best_score)
-            print(">>게임을 종료합니다.")    
+            self.save()
+            print(">>게임을 종료합니다.")
 
-quizzes, best_score = load_state(quizzes)
-game = QuizGame(quizzes, best_score)
+game = QuizGame(quizzes, None)
+game.load()
 game.run()
 
