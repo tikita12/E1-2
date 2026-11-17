@@ -253,36 +253,3 @@ quizzes, best_score = load_state(quizzes)
 game = QuizGame(quizzes, best_score)
 game.run()
 
-while True:
-    game.show_menu()
-
-    choice = get_menu_choice()
-
-    if choice == 5 :
-        save_state(game.quizzes, game.best_score)
-        print(">>게임을 종료합니다.")
-        break
-    elif choice == 1 :
-        game.play()
-    elif choice == 2 :
-        add_quiz(game.quizzes)
-    elif choice == 3 :
-        print()
-        print("-" * 40 )
-        print("퀴즈 목록")
-        print("-" * 40)
-
-        if len(game.quizzes) == 0:
-            print("등록된 퀴즈가 없습니다.")
-        else:
-            for number,  quiz in enumerate(game.quizzes, start=1):
-                print(f"{number}. {quiz.question}")
-    elif choice == 4 :
-        bestscore(game.best_score)
-    else :
-        print(">>선택한 기능은 준비 중 입니다..")
-
-
-
-
- 
