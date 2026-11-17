@@ -153,3 +153,5 @@ python3 tools/benchmark.py
 
 이미지를 제외하는 AI 사전평가에서도 읽을 수 있도록 코드와 마크다운 실행 기록을 함께 제출합니다. 과제에서 별도로 요구한 화면 캡처는 [스크린샷 준비 절차](docs/screenshots/README.md)에 따라 첨부해야 합니다.
 
+Git 실습 메모: 이 문장은 별도로 clone한 저장소에서 README를 수정하는 실습으로 추가했습니다.
+
