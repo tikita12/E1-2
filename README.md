@@ -361,6 +361,54 @@ if __name__ == "__main__":
 
 테스트에서 import main을 해도 이 블록은 실행되지 않아, 메뉴 입력을 기다리지 않고 함수를 검사할 수 있습니다.
 
+## 클래스·객체·함수: 실제 코드로 구분하기
+
+### 1. `Quiz`는 설계도(클래스)
+
+```python
+class Quiz:
+    def __init__(self, question, choices, answer):
+        self.question = question
+        self.choices = choices
+        self.answer = answer
+
+    def check_answer(self, user_answer):
+        return user_answer == self.answer
+```
+
+`class Quiz:`는 `Quiz`라는 자료형을 정의합니다. `__init__`은 새 퀴즈가 생길 때 질문·선택지·정답을 객체에 넣습니다. `self`는 지금 만들거나 사용하는 퀴즈 자신입니다. `question`, `choices`, `answer`는 객체의 **속성**이고 `check_answer`는 퀴즈가 할 수 있는 **메서드**입니다.
+
+### 2. `Quiz(...)`는 실제 객체 하나를 만듭니다
+
+```python
+quiz = Quiz(
+    "현재 작업 디렉터리를 확인하는 명령어는?",
+    ["ls", "pwd", "cd", "mkdir"],
+    2
+)
+```
+
+이 코드를 실행하면 Quiz 설계도에서 실제 퀴즈 객체가 만들어집니다. 이 객체는 질문을 `quiz.question`, 선택지를 `quiz.choices`, 정답을 `quiz.answer`로 가지고 있습니다. `Quiz(...)`를 여러 번 호출하면 각기 다른 문제를 가진 객체가 여러 개 생깁니다.
+
+### 3. `play_quiz(...)`는 한 문제 진행을 맡는 함수입니다
+
+```python
+def play_quiz(current_quiz):
+    current_quiz.display()
+    answer = get_number("정답 번호를 입력하세요: ")
+
+    if current_quiz.check_answer(answer):
+        print("정답입니다")
+        return True
+    else:
+        print(f"오답입니다. 정답은 {current_quiz.answer}번입니다.")
+        return False
+```
+
+여기서 `current_quiz`는 매개변수 이름입니다. `play_quiz(quiz)`라고 부르면 실제 퀴즈 객체 `quiz`가 인자로 전달됩니다. 이 함수는 퀴즈 출력, 입력, 정오답 안내를 묶고 `True` 또는 `False`를 반환합니다. `QuizGame.play()`는 이 반환값을 받아 정답 수를 계산합니다.
+
+**구분하는 법:** 클래스는 설계도, 객체는 설계도로 만든 실제 퀴즈, 함수는 호출해서 실행하는 작업입니다. 클래스 안에 있는 함수(`check_answer`)는 메서드라고 부릅니다. `print()`는 화면에 표시하고 `return`은 호출한 코드로 값을 돌려줍니다.
+
 ## state.json 설명
 
 프로젝트 루트에 UTF-8로 저장합니다. 다음은 구조를 보여 주는 **문제 1개짜리 예시**이며 기본 문제는 5개입니다.
