@@ -3,7 +3,8 @@ import json
 import random
 from pathlib import Path
 
-STATE_FILE = Path(__file__).resolve().parent / "state.json"
+STATE_FILE = Path(__file__).resolve().parent / "state.json" #어디에서 실행하든 같은 파일을 사용하도록
+
 
 class Quiz: #문제의 정보를 관리하는 클래스
     def __init__(self, question, choices, answer):
@@ -30,7 +31,7 @@ def get_number(prompt):
             print("숫자를 입력해 주세요.")
             continue
 
-        if number in [1, 2, 3, 4 ]:
+        if number in [1, 2, 3, 4 ]: # if 1 <= number <= 4
             return number
         
         print("1~4 사이의 번호를 입력해주세요")

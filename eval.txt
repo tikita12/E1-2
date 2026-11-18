@@ -1,0 +1,172 @@
+NOTICE [2 ]      2026.11.13                                                                                                               MY
+
+                                                                                                                                          
+
+                                        
+
+                                                                                                                                    
+
+                                  -- AI   . AI    ,                                                                           ( 2)
+
+                                 .
+
+                              1                                                     (Beginner's Course)                 ()  
+
+                                    --   ·   . PDF·· (.pdf, .png, .docx, .hwp )   ,    (.md)   .
+
+                                    
+
+                                  1(2/18) 
+
+                               
+
+                                 AI  
+
+                                  : 2026-11-10 20:32:21
+
+                              URL                                                 Branch                              URL    
+                                                                                     main
+                              11% https://github.com/tikita12/E1-2 (2 / 18 URL )
+
+                                    
+                                      (,  //)   , state.json  · ··Git ·   
+                                      .
+
+                             []   3 (18)   0                                                                                           
+
+                                   FAIL   #1
+
+                                            main.py > ' [1].  '
+
+                                              
+
+                                                 
+
+                                             (:  /)     .
+
+                                   PASS   #2
+
+                                            main.py > 'if answer == current_quiz.answer:' 'def get_number(prompt):'
+
+                                                 
+
+                                            (: EOF)  
+
+                                            EOF/        .
+
+                                   FAIL   #3
+
+                                        /   state.json   
+
+                                             /  state.json ·   .
+
+                                   PASS   #4
+
+                                            main.py > 'quizzes = ['
+
+                                                 
+
+                                        README     
+
+                                              (: 5 ) README   .
+
+                                   FAIL   #5
+
+                                         10     
+
+                                            GitHub  URL  ( ) .
+
+                                   FAIL   #6
+
+                                     · (git graph)    
+
+                                                 .
+
+                                   FAIL   #7
+
+                                     clone/pull   README   
+
+                                            ·    README    .
+
+                                   FAIL   #8
+
+                                            main.py > 'class Quiz:'
+
+                                            Quiz   
+
+                                     Quiz() Game       
+
+                                            README Quiz (QuizGame)   .
+
+                                   FAIL   #9
+
+                                            main.py > 'def get_number(prompt):'
+
+                                                   
+
+                                       (//IO )      
+
+                                                README  /  .
+
+                                   FAIL   #10
+
+                                     state.json  · ·     
+
+                                            state.json     .
+
+                                   FAIL   #11
+
+                                      (: SIGINT)        / 
+
+                                                    ·.
+
+                                   FAIL   #12
+
+                                             
+
+                                                 README .
+
+                                   FAIL   #13
+
+                                            main.py > 'class Quiz:'
+
+                                                
+
+                                       (·)   
+
+                                              (·) README .
+
+                                   FAIL   #14
+
+                                            README.md > '     '
+
+                                                
+
+                                     JSON   (·)    
+
+                                             JSON    README .
+
+                                   FAIL   #15
+
+                                        (·)     / 
+
+                                             IO       .
+
+                                   FAIL   #16
+
+                                      1000    ··    
+
+                                                    .
+
+                                   FAIL   #17
+
+                                     state.json   ··    
+
+                                                 ()  .
+
+                                   FAIL   #18
+
+                                         (· · )      
+
+                                                  README .
+

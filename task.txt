@@ -1,0 +1,374 @@
+       40 / 
+
+   ()  
+
+
+
+       
+
+       
+
+  1.  
+
+        ,        .
+              .
+        .
+   Python Git "     " ,       .
+            .
+   Python    /  , ( )   .
+    JSON         " " .
+   , Git   .
+     ,     , GitHub  .
+       ( , PR,  )  .
+
+  2.  
+
+    3   Python   1 GitHub  1 .
+     1.   
+                ,     /// /  .
+            ,  ,  ,    .
+               5   .
+                   . ( )
+     2.  
+            2    . (: Quiz, QuizGame)
+              . ( / /  )
+              state.json  UTF-8   .
+     3. GitHub 
+             GitHub  .
+            10     .
+            1     ( checkout , merge )  .
+           clone  pull   1    .
+           README.md    .
+                
+                  
+                
+                
+                
+                 ( state.json )
+
+  3.  
+
+      ,       .
+   Python 
+
+        ,     .
+        int , str , bool , list , dict     .
+        if/elif/else        .
+        for  while       .
+        ,     .
+    
+        ,     .
+        __init__  self     .
+        (attribute) (method)    .
+    
+        , ,      .
+       JSON  ,       .2
+        try/except      .
+   Git 
+       Git      .
+        init , add , commit , push , pull , checkout , clone       .
+           .
+         clone , pull     .
+
+  4.   
+
+       .      .
+     1. Git  
+       GitHub   .
+         .
+        .gitignore , README.md  .
+       Git:       commit  push  .
+  2.  
+            .
+            .
+          .
+            .
+       Git:     .
+  3.  /   ( )
+               .
+
+                . (: 1 )
+             (: abc )        .
+              (:  9,  0)         .
+            ( Enter)        .
+          Ctrl+C (KeyboardInterrupt)    (EOFError)  " "  .
+
+             ,      .
+               .
+
+                .
+               ,    ( ).
+  4. Quiz 
+          Quiz  .
+       : (question), (choices), (answer)
+            4  .
+            1~4      . (  )
+       :  ,      .
+       Git: Quiz    .
+  5.   
+           5   .
+         , (4),  .
+       Quiz    .
+       Git:      .
+  6.   ( )
+       Git: main      .
+         .
+           .
+       /  .
+           .
+          .
+       Git:     main  .
+  7.  
+           .
+        (,  4,  ) .
+            . ( /   )
+          .
+       Git:      .
+  8.  
+            .
+          .
+       Git:      .
+  9.  
+           .
+             .
+          .
+            .
+       Git:     .
+ 10. QuizGame 
+   *    QuizGame  .
+   * :  ,   
+   * :  ,  ,  ,  ,  ,  / 
+   * Git:     .
+ 11.  / ( **state.json** )
+   *       state.json    . (UTF-8  )
+   * JSON     .
+   *   ( )    .
+   *   /    try/except  .
+   *   (  ;  /  ):
+   * quizzes:  
+   * best_score:  (    )
+   * Git:      .
+ 12. README.md 
+   * README.md    .
+   *  
+   *    
+   *  
+   *  
+   *  
+   *   ( state.json //)
+   * Git: README    .
+ 13. Git   
+   *   clone  pull     .         .
+   *    clone     .
+   *    (: README   )  commit  push .
+   *     pull   .
+   * pull     .
+
+5.   ()
+
+  1.  
+             .
+        random    .
+
+  2.   
+               .
+   3.  
+        Quiz    .
+             .
+              .
+
+   4.   
+            .
+           .
+
+   5.   
+              .
+        /,   ,  .
+
+
+
+6.  
+
+    Python 3.10   .
+          . (   )
+
+
+
+7.  
+
+      
+            state.json   .
+          UTF-8 .
+
+     
+             ,    .
+         2     .
+
+    Git 
+         10      .
+              (/Quiz////README ) +     
+           ,      .
+
+              Feat:    
+              Fix:    
+              Docs: README   
+              Refactor: QuizGame  
+
+        Git   7( init , add , commit , push , pull , checkout , clone )      .
+    
+
+        GitHub  URL
+           (: VSCode, Python , Git )
+           ( , , , )
+         git log --oneline --graph  
+
+Test Case
+
+8.  
+
+     .     .
+     ()
+
+                                                                                                                                                                   CSS
+
+                ========================================
+
+               
+
+                ========================================
+
+        1.  
+        2.  
+        3.  
+        4.  
+        5. 
+
+                ========================================
+
+        :
+
+     ()
+
+                                                                                                                                                                   CSS
+
+        : 1
+          ! ( 5)
+
+                ----------------------------------------
+
+        [ 1]
+               ?
+        1. 4
+        2. 5
+        3. 6
+        4. 7
+         : 3
+         !
+
+                ----------------------------------------
+
+        ... () ...
+
+                ========================================
+
+         : 5  4 ! (80)
+           !
+
+                ========================================
+
+     ()
+
+                                                                                                                                                                   CSS
+
+      : 2
+         .
+       :  '' ?
+       1: 
+       2: 
+  3: 
+  4: 
+   (1-4): 2
+   !
+
+ ()
+
+                                                                                                                                                    CSS
+
+   : 3
+       ( 6)
+
+      ----------------------------------------
+
+   [1]        ?
+   [2]  ''    ?
+
+      ...
+      ----------------------------------------
+
+ ()
+
+                                                                                                                                                    CSS
+
+   : 4
+     : 80 (5  4 )
+
+  ()
+
+                                                                                                                                                    CSS
+
+   : abc
+     . 1-5   .
+   : 9
+     . 1-5   .
+
+     ()
+
+                                                                                                                                                    CSS
+
+      ========================================
+
+          
+
+      ========================================
+
+      . ( 6,  80)
+
+      ========================================
+
+   1.  
+   2.  
+
+      ...
+
+state.json  (  )
+
+                                                                                                                                                    CSS
+
+   {
+      "quizzes": [
+         {
+
+      "question": "Python ?",
+
+             "choices": ["Guido", "Linus", "Bjarne", "James"],
+             "answer": 1
+         }
+      ],
+      "best_score": 3
+   }
+
+README  
+    
+      
+     (: python main.py )
+    ( ///)
+    
+     ( state.json // )
+
+    ( )
+
+         docs/screenshots/menu.png
+         docs/screenshots/play.png
+         docs/screenshots/add_quiz.png
+         docs/screenshots/score.png
+

@@ -1,0 +1,482 @@
+<title>개발 입문: 연수2·3 핵심 개념</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#F8F9FA;
+    --surface:#FFFFFF;
+    --ink:#1F2937;
+    --muted:#6B7280;
+    --faint:#9CA3AF;
+    --line:#E5E7EB;
+    --accent1:#3B82F6;
+    --accent2:#10B981;
+    --accent3:#F59E0B;
+    --accent1-soft:rgba(59,130,246,.08);
+    --accent2-soft:rgba(16,185,129,.08);
+    --accent3-soft:rgba(245,158,11,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#111827;
+      --surface:#1F2937;
+      --ink:#F3F4F6;
+      --muted:#D1D5DB;
+      --faint:#9CA3AF;
+      --line:#374151;
+      --accent1:#60A5FA;
+      --accent2:#34D399;
+      --accent3:#FBBF24;
+      --accent1-soft:rgba(96,165,250,.12);
+      --accent2-soft:rgba(52,211,169,.12);
+      --accent3-soft:rgba(251,191,36,.12);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#111827;
+    --surface:#1F2937;
+    --ink:#F3F4F6;
+    --muted:#D1D5DB;
+    --faint:#9CA3AF;
+    --line:#374151;
+    --accent1:#60A5FA;
+    --accent2:#34D399;
+    --accent3:#FBBF24;
+    --accent1-soft:rgba(96,165,250,.12);
+    --accent2-soft:rgba(52,211,169,.12);
+    --accent3-soft:rgba(251,191,36,.12);
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:"IBM Plex Sans KR", system-ui, sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.6;
+  }
+  .container{
+    max-width:1200px;margin:0 auto;padding:40px 20px;
+  }
+
+  h1{font-size:2.5rem;font-weight:700;margin:0 0 10px;text-wrap:balance}
+  h2{font-size:1.8rem;font-weight:700;margin:40px 0 20px;border-left:4px solid var(--accent1);padding-left:16px}
+  h3{font-size:1.3rem;font-weight:600;margin:24px 0 12px}
+  h4{font-size:1.05rem;font-weight:600;margin:16px 0 8px;color:var(--accent1)}
+  p{margin:12px 0;font-size:1rem}
+  li{margin:8px 0}
+
+  .hero{background:linear-gradient(135deg, var(--accent1-soft), var(--accent2-soft));
+    border-left:4px solid var(--accent1);padding:32px;border-radius:12px;margin-bottom:40px}
+  .hero h1{margin:0 0 8px;color:var(--accent1)}
+  .hero p{margin:0;font-size:1.05rem;color:var(--muted)}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:20px;margin:16px 0;transition:transform .2s,box-shadow .2s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+
+  .box{background:var(--accent1-soft);border-left:3px solid var(--accent1);padding:16px;margin:12px 0;border-radius:6px}
+  .box.green{background:var(--accent2-soft);border-left-color:var(--accent2)}
+  .box.orange{background:var(--accent3-soft);border-left-color:var(--accent3)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:20px 0}
+
+  .code{font-family:"IBM Plex Mono", monospace;background:var(--surface);border:1px solid var(--line);
+    border-radius:6px;padding:12px 16px;overflow-x:auto;font-size:.9rem;margin:8px 0}
+  code{font-family:"IBM Plex Mono", monospace;background:rgba(0,0,0,.05);padding:2px 6px;
+    border-radius:4px;font-size:.9em}
+
+  .tl{list-style:none;padding:0}
+  .tl li{padding-left:28px;position:relative;margin:10px 0}
+  .tl li:before{content:"▶";position:absolute;left:0;color:var(--accent1);font-weight:600}
+
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:20px 0}
+  .step{background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:16px;text-align:center}
+  .step-num{font-size:1.5rem;font-weight:700;color:var(--accent1);margin-bottom:8px}
+  .step-text{font-size:.95rem;color:var(--muted)}
+
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+  @media (max-width:768px){.compare{grid-template-columns:1fr}}
+  .compare-col{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+  .compare-col h4{margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+
+  .matrix{width:100%;border-collapse:collapse;margin:16px 0}
+  .matrix th,.matrix td{padding:12px;text-align:left;border-bottom:1px solid var(--line)}
+  .matrix th{background:var(--accent1-soft);font-weight:600}
+  .matrix tr:last-child td{border-bottom:none}
+
+  .keyword{display:inline-block;background:var(--accent1-soft);color:var(--accent1);
+    padding:2px 8px;border-radius:4px;font-weight:600;font-size:.85em;margin:0 2px}
+
+  .summary{background:var(--accent2-soft);border-left:4px solid var(--accent2);
+    padding:20px;border-radius:8px;margin:30px 0}
+  .summary h3{margin:0 0 12px;color:var(--accent2)}
+
+  footer{text-align:center;padding:40px 20px;color:var(--faint);border-top:1px solid var(--line);margin-top:60px}
+</style>
+
+<div class="container">
+  <div class="hero">
+    <h1>🎯 개발 입문 필수 개념</h1>
+    <p>연수2(퀴즈 게임)와 연수3(AI 시뮬레이터)를 통해 배우는 프로그래밍의 핵심</p>
+  </div>
+
+  <!-- 섹션 1 -->
+  <h2>📚 1부: 프로그래밍이란 뭘까?</h2>
+
+  <div class="card">
+    <h3>💡 가장 쉬운 설명</h3>
+    <p><strong>프로그래밍 = 컴퓨터에게 명령을 내리는 것</strong></p>
+    <div class="box">
+      <strong>예시:</strong> 엄마한테 "밥 먹어" 라고 말하는 것처럼, 컴퓨터한테도 "화면에 메뉴를 출력해" "사용자가 입력한 숫자를 받아" "그 숫자가 맞는지 비교해" 이런 식으로 차례대로 명령합니다.
+    </div>
+    <p style="margin-top:16px"><strong>차이점:</strong> 엄마는 "대충 무슨 뜻인지" 알아들을 수 있지만, 컴퓨터는 <span class="keyword">정확한 명령어</span>만 이해합니다.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h4>❌ 컴퓨터가 못 알아듣는 말</h4>
+      <div class="code">
+"메뉴를 예쁘게 만들어"
+"사용자 입력을 받아"
+"뭔가를 계산해"
+      </div>
+      <p style="font-size:.9rem;color:var(--muted);margin:8px 0">너무 모호해요!</p>
+    </div>
+    <div class="card">
+      <h4>✅ 컴퓨터가 알아듣는 말</h4>
+      <div class="code">
+print("1. 풀이하기")
+x = int(input())
+if x == 2: print("정답!")
+      </div>
+      <p style="font-size:.9rem;color:var(--muted);margin:8px 0">구체적이고 명확해요!</p>
+    </div>
+  </div>
+
+  <!-- 섹션 2 -->
+  <h2>🧩 2부: 연수2 - 퀴즈 게임에서 배운 것</h2>
+
+  <div class="card">
+    <h3>🎮 연수2: 사용자가 풀 수 있는 퀴즈 게임</h3>
+    <p>당신이 만든 것: 사용자가 터미널에서 선택지를 고르고 점수를 받는 프로그램</p>
+  </div>
+
+  <h3>💾 핵심 개념 1: 데이터를 저장한다 (파일에 보관)</h3>
+  <div class="box green">
+    <strong>왜 필요할까?</strong> 프로그램을 종료하고 다시 켜도 "내가 푼 퀴즈" 와 "최고 점수"를 기억해야죠. 메모리는 프로그램을 끄면 사라지니까, 파일에 저장해야 합니다.
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">사용자가 퀴즈를 풀고 점수를 얻음</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">그 데이터를 파일(state.json)에 기록</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">내일 다시 프로그램을 열 때, 파일에서 불러옴</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>파일 형식: JSON은 뭘까?</h4>
+    <div class="code">
+{
+  "quizzes": [
+    {
+      "question": "pwd는 뭔가?",
+      "choices": ["ls", "pwd", "cd", "mkdir"],
+      "answer": 2
+    }
+  ],
+  "best_score": 80
+}
+    </div>
+    <p style="margin-top:12px"><span class="keyword">JSON</span> = 사람이 쉽게 읽을 수 있고, 컴퓨터도 쉽게 읽고 쓸 수 있는 형식입니다. 중괄호 { } 와 쌍따옴표 " " 를 꼭 맞춰야 해요.</p>
+  </div>
+
+  <h3>💾 핵심 개념 2: 프로그램을 구조화한다 (클래스 & 메서드)</h3>
+  <div class="box green">
+    <strong>왜 필요할까?</strong> 프로그램이 복잡해질수록 "어떤 코드가 뭘 하는지" 헷갈립니다. 그래서 역할별로 나눕니다.
+  </div>
+
+  <div class="compare">
+    <div class="compare-col">
+      <h4>❌ 엉망인 코드</h4>
+      <div class="code" style="font-size:.8rem">
+# 1000줄의 코드가
+# 뒤죽박죽
+# 어디서부터 읽어야
+# 할지 모르겠고
+# 고칠 땐 어디를
+# 고쳐야 할지
+# 모른다...
+      </div>
+    </div>
+    <div class="compare-col">
+      <h4>✅ 깔끔한 코드</h4>
+      <div class="code" style="font-size:.8rem">
+class Quiz:
+  def display()
+  def check()
+
+class QuizGame:
+  def play()
+  def add_quiz()
+  def save()
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Quiz 클래스 = "한 개의 문제"를 관리</h4>
+    <ul class="tl">
+      <li>문제 (question)</li>
+      <li>선택지들 (choices)</li>
+      <li>정답 (answer)</li>
+      <li>메서드: 문제를 화면에 보여주기, 사용자 답이 맞는지 확인하기</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>QuizGame 클래스 = "게임 전체"를 관리</h4>
+    <ul class="tl">
+      <li>퀴즈 목록 (여러 개의 Quiz 객체)</li>
+      <li>최고 점수</li>
+      <li>메서드: 메뉴 보여주기, 풀이하기, 추가하기, 저장하기, 불러오기</li>
+    </ul>
+  </div>
+
+  <div class="box">
+    <strong>핵심:</strong> <span class="keyword">객체지향 = 현실처럼 프로그램을 구성</span><br>
+    현실에서 "게임" 하면 여러 "문제들"이 있고, 각 문제는 자신의 정답을 갖고 있죠. 프로그램도 그렇게 만드는 거예요!
+  </div>
+
+  <h3>💾 핵심 개념 3: 오류를 견딘다 (예외 처리)</h3>
+  <div class="box green">
+    <strong>왜 필요할까?</strong> 사용자가 "abc"를 입력하거나, 파일이 없거나, 프로그램 중간에 Ctrl+C를 눌 수도 있어요. 그럴 때도 프로그램이 멈추지 않아야 합니다.
+  </div>
+
+  <div class="card">
+    <div class="code">
+try:
+    answer = int(input("1-4 중 고르세요: "))
+except ValueError:
+    print("숫자를 입력해주세요!")
+    # 다시 입력받기
+    </div>
+    <p style="margin-top:12px"><span class="keyword">try</span> = "이 코드를 실행해봐" <br>
+    <span class="keyword">except</span> = "만약 오류 나면 이걸 대신 실행해"</p>
+  </div>
+
+  <!-- 섹션 3 -->
+  <h2>🧠 3부: 연수3 - AI는 어떻게 생각할까?</h2>
+
+  <div class="card">
+    <h3>🤖 AI도 단순한 수학을 한다</h3>
+    <p>AI가 "똑똑해 보이지만", 사실은 <strong>엄청 많은 숫자를 더하고 곱하는 것</strong>일 뿐입니다.</p>
+  </div>
+
+  <h3>🎯 핵심 개념 1: 필터(Filter)란?</h3>
+  <div class="box orange">
+    <strong>필터 = 패턴을 찾기 위한 "기준이 되는 모양"</strong>
+  </div>
+
+  <div class="card">
+    <h4>십자가 필터를 보자</h4>
+    <div class="code">
+0 1 0
+1 1 1
+0 1 0
+    </div>
+    <p style="margin-top:12px">이건 "십자가 모양"을 나타내는 2차원 배열(표)입니다. 1은 "색칠된 부분", 0은 "비어있는 부분"이에요.</p>
+  </div>
+
+  <div class="card">
+    <h4>이 필터를 사용하는 목적</h4>
+    <p>"내 앞에 보이는 그림이 십자가 모양인지, X 모양인지 판별하고 싶다!"</p>
+    <p>그럼 십자가 필터와 X 필터를 만들어서, 입력된 그림과 비교하면 돼요.</p>
+  </div>
+
+  <h3>🧮 핵심 개념 2: MAC 연산 = 얼마나 비슷한지 계산</h3>
+  <div class="box orange">
+    <strong>MAC (Multiply-Accumulate) = 곱하고 (Multiply) 누적해서 더하기 (Accumulate)</strong>
+  </div>
+
+  <div class="card">
+    <h4>예시: 십자가 모양 찾기</h4>
+    <p><strong>십자가 필터:</strong></p>
+    <div class="code">
+0 1 0
+1 1 1
+0 1 0
+    </div>
+
+    <p style="margin-top:16px"><strong>입력된 그림 (십자가를 그린 거):</strong></p>
+    <div class="code">
+0 1 0
+1 1 1
+0 1 0
+    </div>
+
+    <p style="margin-top:16px"><strong>계산 방법:</strong></p>
+    <table class="matrix">
+      <thead><tr><th>위치</th><th>필터</th><th>입력</th><th>곱하기</th></tr></thead>
+      <tbody>
+        <tr><td>왼쪽 위</td><td>0</td><td>0</td><td>0 × 0 = 0</td></tr>
+        <tr><td>위</td><td>1</td><td>1</td><td>1 × 1 = 1</td></tr>
+        <tr><td>오른쪽 위</td><td>0</td><td>0</td><td>0 × 0 = 0</td></tr>
+        <tr><td>왼쪽</td><td>1</td><td>1</td><td>1 × 1 = 1</td></tr>
+        <tr><td>중앙</td><td>1</td><td>1</td><td>1 × 1 = 1</td></tr>
+        <tr><td>오른쪽</td><td>1</td><td>1</td><td>1 × 1 = 1</td></tr>
+        <tr><td>왼쪽 아래</td><td>0</td><td>0</td><td>0 × 0 = 0</td></tr>
+        <tr><td>아래</td><td>1</td><td>1</td><td>1 × 1 = 1</td></tr>
+        <tr><td>오른쪽 아래</td><td>0</td><td>0</td><td>0 × 0 = 0</td></tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:12px"><strong>모두 더하기:</strong> 0 + 1 + 0 + 1 + 1 + 1 + 0 + 1 + 0 = <span style="color:var(--accent2);font-weight:700">5점</span></p>
+    <p>✅ 점수가 높으면 "십자가 맞다!"</p>
+  </div>
+
+  <div class="card">
+    <h4>만약 X 필터라면?</h4>
+    <div class="code">
+1 0 1
+0 1 0
+1 0 1
+    </div>
+    <p style="margin-top:12px">같은 십자가 그림(0 1 0 / 1 1 1 / 0 1 0)과 X 필터를 비교하면:</p>
+    <p><strong>점수 = 1 × 0 + 0 × 1 + 1 × 0 + ... = 1점</strong></p>
+    <p>❌ 점수가 낮으면 "X가 아니네!"</p>
+  </div>
+
+  <h3>⚡ 핵심 개념 3: 크기가 커질수록 계산이 복잡해진다</h3>
+  <div class="box orange">
+    <strong>O(N²) = 크기의 제곱만큼 계산량이 는다</strong>
+  </div>
+
+  <div class="card">
+    <table class="matrix">
+      <thead><tr><th>크기</th><th>곱셈 횟수</th><th>예상 시간</th></tr></thead>
+      <tbody>
+        <tr><td>3×3</td><td>9번</td><td>매우 빠름 ⚡</td></tr>
+        <tr><td>5×5</td><td>25번</td><td>빠름 ⚡</td></tr>
+        <tr><td>13×13</td><td>169번</td><td>중간 🔸</td></tr>
+        <tr><td>25×25</td><td>625번</td><td>상대적으로 느림 🐢</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px">📊 <strong>패턴:</strong> 크기가 2배 → 계산량은 4배</p>
+  </div>
+
+  <div class="box">
+    <strong>현실에서는:</strong> 실제 AI는 수백×수백 크기의 필터로 고화질 사진 한 장을 분석합니다. 이건 엄청난 계산이 필요해서, 일반 CPU로는 너무 느려요. 그래서 GPU나 NPU 같은 "계산 전용 칩"이 필요한 거예요!
+  </div>
+
+  <!-- 섹션 4 -->
+  <h2>🔗 4부: 연수2와 연수3의 연결고리</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h4>연수2: 게임 개발</h4>
+      <ul class="tl">
+        <li>사용자 입력받기 ✓</li>
+        <li>데이터를 구조화하기 (클래스) ✓</li>
+        <li>파일에 저장하기 ✓</li>
+        <li>오류 처리하기 ✓</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>연수3: AI 계산</h4>
+      <ul class="tl">
+        <li>사용자 입력받기 ✓</li>
+        <li>2차원 배열(행렬) 다루기 ✓</li>
+        <li>반복문으로 복잡한 계산하기 ✓</li>
+        <li>성능 측정하기 ✓</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="summary">
+    <h3>🎓 공통으로 배우는 것</h3>
+    <ul class="tl">
+      <li><strong>문제를 작은 단위로 나누기:</strong> 큰 프로그램도 함수/클래스로 나누면 쉬워져요</li>
+      <li><strong>데이터를 올바르게 다루기:</strong> 정수? 실수? 배열? 올바른 형식이 중요해요</li>
+      <li><strong>오류에 강하게 만들기:</strong> 항상 "뭔가 잘못될 수 있다"고 생각하고 준비해요</li>
+      <li><strong>성능을 고려하기:</strong> "이 코드가 얼마나 빨리 돌아갈까?" 항상 묻는 습관</li>
+      <li><strong>문서로 남기기:</strong> 코드만 있으면 나중에 모르니까, README를 꼭 써야 해요</li>
+    </ul>
+  </div>
+
+  <!-- 섹션 5 -->
+  <h2>🎯 5부: 비전공자가 알아야 할 것</h2>
+
+  <div class="card">
+    <h3>❌ "프로그래밍 = 외우기"는 틀렸어요</h3>
+    <p>프로그래밍은 <strong>"문제를 풀기 위한 논리적 사고"</strong>예요.</p>
+    <div class="box">
+      "입력 → 처리 → 출력" 이 흐름만 이해하면, 세부 문법은 나중에 배워도 돼요!
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>✅ 비전공자가 프로그래밍 할 때의 장점</h3>
+    <ul class="tl">
+      <li><strong>단순함:</strong> "정답은 뭔가?" 같은 고민 없어요. 코드가 하는 일이 전부예요.</li>
+      <li><strong>의심:</strong> "컴퓨터가 정말 이렇게 할까?"라는 의심이 도움 돼요. 테스트를 많이 하게 거든요.</li>
+      <li><strong>다양성:</strong> 전공자는 "이렇게 하는 게 정석"이라고 생각하지만, 당신은 새로운 각도로 접근할 수 있어요.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>📖 외워야 할 단어들 (정확히 알아야 해요)</h3>
+    <ul class="tl">
+      <li><span class="keyword">변수</span> = 값을 담는 상자</li>
+      <li><span class="keyword">함수</span> = "이 코드 조각을 필요할 때마다 실행해" 라고 등록해두기</li>
+      <li><span class="keyword">클래스</span> = 함수들을 모아서 하나의 "객체"를 만들기</li>
+      <li><span class="keyword">배열</span> = 데이터를 순서대로 나열한 것</li>
+      <li><span class="keyword">딕셔너리</span> = 데이터를 "이름: 값" 형태로 보관</li>
+      <li><span class="keyword">반복문</span> = 같은 작업을 여러 번 반복</li>
+      <li><span class="keyword">조건문</span> = "만약 ~라면" 으로 분기하기</li>
+    </ul>
+  </div>
+
+  <!-- 최종 섹션 -->
+  <h2>🚀 다음 단계로 가기 전에</h2>
+
+  <div class="card">
+    <h3>연수2를 완성하면서 묻게 될 질문들</h3>
+    <table class="matrix">
+      <thead><tr><th>질문</th><th>답변</th></tr></thead>
+      <tbody>
+        <tr><td>"왜 JSON을 쓰나요?"</td><td>다른 형식도 있지만, JSON은 사람도 읽고 프로그램도 읽기 쉬워요</td></tr>
+        <tr><td>"클래스 말고 함수만으로 못 하나요?"</td><td>가능하지만, 코드가 복잡해져요. 프로그램이 커질수록 클래스가 필요해요</td></tr>
+        <tr><td>"실패한 테스트를 고치려면?"</td><td>오류 메시지를 읽고, 어디서 잘못됐는지 찾아요. 이걸 "디버깅"이라고 해요</td></tr>
+        <tr><td>"Git이 정말 필요해요?"</td><td>혼자 할 땐 선택사항이지만, 팀 작업하면 거의 필수예요</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary">
+    <h3>🎓 최종 체크리스트</h3>
+    <ul class="tl">
+      <li>✅ 프로그래밍은 "컴퓨터에게 명령하기"다</li>
+      <li>✅ 큰 프로그램은 작은 단위(함수/클래스)로 나눠야 한다</li>
+      <li>✅ 데이터는 파일에 저장해야 오래 보관할 수 있다</li>
+      <li>✅ 오류는 항상 일어날 수 있으니 대비해야 한다</li>
+      <li>✅ AI도 결국 수학 계산을 반복하는 거다</li>
+      <li>✅ 코드는 혼자만 이해하면 안 되고, 남들도 이해할 수 있게 문서를 써야 한다</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  <p>올인원 1기 입학 연수 — 연수2 (퀴즈 게임), 연수3 (AI 시뮬레이터) 연계 개념 가이드</p>
+  <p style="font-size:.9rem;margin-top:8px">작성: 2026-11-17 | 대상: 비전공자 & 개발 초심자</p>
+</footer>
