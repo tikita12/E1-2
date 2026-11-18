@@ -71,7 +71,19 @@ E1-2/
 | `save_state`, `load_state` | JSON 파일 입출력과 객체·딕셔너리 변환 |
 | `validate_state`, `backup_corrupt_state` | 자료형·범위 검사와 손상 원본 보관 |
 
-관련 데이터와 동작을 묶기 위해 클래스를 사용했습니다. 여러 `Quiz` 객체가 같은 출력·정답 확인 코드를 재사용하고 `QuizGame`이 게임 상태를 관리합니다. `__init__`은 초기 상태를 설정하며 `self`는 현재 객체입니다.
+### 함수와 메서드의 호출 약속
+
+| 호출 | 전달하는 값 | 결과 또는 동작 |
+|---|---|---|
+| `get_number(prompt)` | 안내 문구 | 1~4 사이의 정수 반환 |
+| `play_quiz(current_quiz)` | 퀴즈 객체 | 정오답을 안내하고 `True` 또는 `False` 반환 |
+| `Quiz.display()` | 호출한 퀴즈 객체 | 질문과 선택지를 출력 |
+| `Quiz.check_answer(user_answer)` | 사용자의 정답 번호 | 정답과 비교한 `bool` 반환 |
+| `load_state(default_quizzes)` | 기본 퀴즈 목록 | 퀴즈 객체 목록과 최고 점수 반환 |
+| `save_state(quizzes, best_score)` | 퀴즈 객체 목록과 점수 | JSON 파일에 저장 |
+| `validate_state(data)` | JSON에서 읽은 값 | 유효하면 검사 종료, 잘못되면 예외 발생 |
+
+관련 데이터와 동작을 묶기 위해 클래스를 사용했습니다. `play_quiz()`는 여러 `Quiz` 객체에 같은 `display()`·`check_answer()` 메서드를 사용하고, `QuizGame`은 게임 상태를 관리합니다. `__init__`은 초기 상태를 설정하며 `self`는 현재 객체입니다. 시간 제한 퀴즈처럼 동작이 다른 종류가 필요해지면 `Quiz`를 확장하는 하위 클래스를 검토할 수 있지만, 현재 과제에는 퀴즈 종류가 하나라 구현하지 않았습니다.
 
 입력 검사와 파일 처리를 게임 진행에서 분리해 저장 형식 변경이 정답 판정 코드에 영향을 덜 주게 했습니다. `if __name__ == "__main__":` 아래 코드는 직접 실행할 때만 동작하므로 테스트에서 클래스를 가져와도 메뉴가 실행되지 않습니다.
 
@@ -432,7 +444,7 @@ def play_quiz(current_quiz):
 - `answer`: 1~4의 정수.
 - `best_score`: 플레이 전에는 `null`, 이후에는 0~100의 정수. 파이썬의 `None`이 JSON의 `null`로 저장됩니다.
 
-JSON은 목록·딕셔너리를 표현하기 쉽고 사람이 읽을 수 있으며 표준 라이브러리로 처리할 수 있어 선택했습니다. 매번 전체 파일을 읽고 쓰므로 대량 데이터나 동시 수정에는 불리합니다. JSON 자체가 암호화나 값 검사를 제공하지는 않습니다.
+JSON은 목록·딕셔너리를 표현하기 쉽고 사람이 읽을 수 있으며 표준 라이브러리로 처리할 수 있어 선택했습니다. 매번 전체 파일을 읽고 쓰므로 대량 데이터나 동시 수정에는 불리합니다. 검색·트랜잭션·동시 업데이트가 중요해지면 SQLite가 더 적합할 수 있습니다. JSON 자체가 암호화나 값 검사를 제공하지는 않습니다.
 
 ### 불러오기와 저장 순서
 
@@ -476,17 +488,98 @@ python3 tools/benchmark.py
 
 ## 요구 변경 시 영향
 
-| 변경 요청 | 수정 대상 | 확인할 내용 |
-|---|---|---|
-| 점수 방식 변경 | `QuizGame.play`, `validate_state` | 기존 최고 점수와 비교·파일 호환성 |
-| 선택지 5개 | 입력 범위, `add_quiz`, `validate_state` | 기존 4지선다 파일, 출력·판정 |
-| 힌트 추가 | `Quiz`, 추가 입력, 입출력 | 기존 파일에 필드가 없을 때 기본값 |
-| 저장 형식·위치 변경 | `STATE_FILE`, 입출력 함수 | 데이터 이전·권한·복구 |
-| 검색·삭제 추가 | `QuizGame`과 메뉴 | 삭제 후 저장·빈 목록·식별자·검색 비용 |
+| 변경 요청 | 수정 대상 | 확인할 내용 | 관련 테스트 |
+|---|---|---|---|
+| 점수 방식 변경 | `QuizGame.play`, `validate_state` | 기존 최고 점수와 비교·파일 호환성 | `test_score_and_lower_score`, `test_first_zero_score_is_not_unplayed` |
+| 선택지 5개 | 입력 범위, `add_quiz`, `validate_state` | 기존 4지선다 파일, 출력·판정 | `test_add_validation_and_restart`, `test_invalid_fields_are_rejected` |
+| 힌트 추가 | `Quiz`, 추가 입력, 입출력 | 기존 파일에 필드가 없을 때 기본값 | 새 필드의 기본값·재실행 테스트 추가 필요 |
+| 저장 형식·위치 변경 | `STATE_FILE`, 입출력 함수 | 데이터 이전·권한·복구 | `test_corrupt_json_is_preserved_and_reset`, 읽기·쓰기 오류 테스트 |
+| 검색·삭제 추가 | `QuizGame`과 메뉴 | 삭제 후 저장·빈 목록·식별자·검색 비용 | 빈 목록 테스트에 더해 검색·삭제 테스트 추가 필요 |
+
+## 평가 피드백의 증거와 개선 계획
+
+평가 PDF에서 보완을 권한 항목을 코드·테스트·실행 자료와 연결했습니다. 스크린샷은 [실제 캡처 목록](docs/screenshots/README.md)에서 확인할 수 있습니다.
+
+| 확인할 내용 | 근거 |
+|---|---|
+| 메뉴와 기능별 실행 화면 | 메뉴·추가·목록·플레이·점수 화면 5장과 환경·Git 화면, clone/push/pull 화면을 `docs/screenshots/`에 첨부 |
+| 메뉴·정답 입력 경계 | `tests/test_game.py`의 `test_first_run_and_menu_input`, `test_add_validation_and_restart`에서 문자·빈값·공백·범위 밖 입력을 확인 |
+| 기본 퀴즈 5개 | `main.py`의 기본 목록과 `test_first_run_and_menu_input`의 저장된 퀴즈 개수 검사 |
+| 재실행·파일 오류 | 재실행 테스트, 손상 JSON·읽기·쓰기 권한·백업 실패 테스트. 권한 오류는 `unittest.mock`으로 재현 |
+| 커밋 10개 이상과 병합 | 아래 실제 `git log` 출력과 `docs/environment.md`의 그래프 기록 |
+| clone/push/pull | GitHub 원격 실습은 `docs/git-practice.md`, 실제 터미널 캡처는 `docs/screenshots/git-workflow.png` |
+
+아래 이력 수치는 평가 보완 문서를 작성하기 직전의 원격 `main` 기준입니다. 이후 문서 커밋도 저장소 이력에 추가됩니다.
+
+```text
+$ git rev-list --count origin/main
+86
+
+$ git log --oneline --no-merges -12 origin/main -- main.py tests/test_game.py
+4c006db 기능: 보너스 과제 랜덤 퀴즈 출제 구현
+ad5bd9a 문서: 제출 설명과 실행 검증 및 성능 측정 자료 준비
+2534a84 게임 기능을 메서드로 정리하고 들여쓰기 오류 수정
+cd16402 Refactor: Quiz 클래스에 문제 출력과 정답 확인 메서드 추가
+1b99363 Feat: 손상 파일 보관 및 기본 데이터 복구
+3055bde Feat: 저장 데이터의 자료형과 값 범위 검사
+f2f6ef0 수정-메뉴중복
+1df9a4f 입력중단 시 저장 및 종료처리
+ba4a44e 퀴즈 진행과 점수 계산을 quizgmae메서드로 이동
+4656003 quizgame 속성으로 퀴즈, 최고점수 관리
+c311843 game 클래스 추가
+12d57f6 빈문제 등록 방지 처리
+```
+
+브랜치 병합 여부는 다음 실제 그래프에서 확인할 수 있습니다.
+
+```text
+$ git log --oneline --graph --all -7
+*   c7e05ac Merge branch 'feature-show-complete-scoring-loop'
+|\
+| * e160ef7 점수 계산 코드 전체를 25페이지에 표시
+|/
+*   30a6947 Merge branch 'feature-use-actual-play-quiz-argument'
+|\
+| * 8ae311c play_quiz 실제 인자 이름으로 수정
+|/
+*   22b6b86 Merge branch 'feature-visual-function-terms'
+|\
+| * 3cf5f0f 함수 용어를 카드와 색상으로 구분
+|/
+*   f954518 Merge branch 'feature-simplify-oop-slide'
+```
+
+### 파일 입출력 호출 순서
+
+```mermaid
+sequenceDiagram
+    participant Main as 시작 코드
+    participant Game as QuizGame 객체
+    participant Load as load_state / validate_state
+    participant Save as save_state
+    participant File as state.json
+    Main->>Game: QuizGame(...) 생성
+    Main->>Game: game.load()
+    Game->>Load: load_state(self.quizzes)
+    Load->>File: JSON 읽기
+    Load->>Load: validate_state(data)
+    Load-->>Game: 퀴즈 객체와 최고 점수 전달
+    Main->>Game: game.run()
+    Note over Game: 문제 추가·전체 플레이 완료·종료 때 저장 시도
+    Game->>Save: self.save() → save_state(...)
+    Save->>File: 기존 파일 확인 후 JSON 기록
+```
+
+### 추가 개선안과 현재 한계
+
+- **백업 정책 예시(미구현):** 저장 전에 현재 파일을 검증하고 임시 파일에 기록한 뒤 교체합니다. 정상 저장본은 최근 3개까지 날짜별로 보관하고, 손상 시 가장 최근 검증 성공본을 복원하는 방식을 검토할 수 있습니다. 현재 구현은 손상된 원본을 이름을 바꿔 보관하지만 정상 파일의 세대별 백업이나 자동 복원은 하지 않습니다.
+- **권한 오류 증거:** 실제 OS 권한을 바꾸지 않고 mock으로 `PermissionError`를 발생시켜 읽기·쓰기·백업 실패 처리와 기존 손상 파일 보호를 확인합니다. 테스트 이름은 `test_read_permission_error`, `test_write_permission_error`, `test_backup_failure_does_not_overwrite_original`입니다.
+- **대량 데이터 우선순위:** 지금은 전체 목록을 메모리에 읽고 저장합니다. 데이터가 커지면 목록 페이지 나누기와 식별자 기반 검색을 먼저 검토하고, 여러 사용자의 동시 수정이나 더 큰 데이터가 필요해질 때 SQLite를 고려합니다. 실측은 [performance.md](docs/performance.md)에 있습니다.
+- **강제 종료 한계:** Ctrl+C와 EOF는 처리하지만, 저장 도중 반복적인 강제 종료·전원 차단·동시 실행까지 보장하지 않습니다. 원자적 파일 교체와 백업 정책이 후속 개선 대상입니다.
 
 ## 제출 자료
 
-이미지를 제외하는 AI 사전평가에서도 읽을 수 있도록 코드와 마크다운 실행 기록을 함께 제출합니다. 실제 콘솔 창에서 촬영한 [스크린샷 6장](docs/screenshots/README.md)을 첨부했습니다. 자동 입력을 사용했으며 기존 저장 데이터는 변경하지 않았습니다.
+이미지를 제외하는 AI 사전평가에서도 읽을 수 있도록 코드와 마크다운 실행 기록을 함께 제출합니다. 실제 콘솔 창에서 촬영한 [실행·Git 스크린샷 7장](docs/screenshots/README.md)을 첨부했습니다. 자동 입력을 사용했으며 기존 저장 데이터는 변경하지 않았습니다.
 
 Git 실습 메모: 이 문장은 별도로 clone한 저장소에서 README를 수정하는 실습으로 추가했습니다.
 
@@ -512,6 +605,12 @@ Git 실습 메모: 이 문장은 별도로 clone한 저장소에서 README를 �
 ### 개발 환경과 Git 병합 기록
 
 ![개발 환경과 Git 그래프](docs/screenshots/environment.png)
+
+### Clone·push·pull 실습
+
+![임시 저장소에서 실제 실행한 clone, push, pull 명령](docs/screenshots/git-workflow.png)
+
+위 화면은 프로젝트를 건드리지 않도록 `/tmp`의 임시 로컬 원격 저장소에서 실제 `git clone`·`git push`·`git pull`을 수행해 촬영했습니다. GitHub 원격을 사용한 기존 실습 명령과 결과는 [git-practice.md](docs/git-practice.md)에 기록했습니다.
 
 ## 발표 자료와 최신 검증
 
