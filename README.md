@@ -75,6 +75,58 @@ E1-2/
 
 입력 검사와 파일 처리를 게임 진행에서 분리해 저장 형식 변경이 정답 판정 코드에 영향을 덜 주게 했습니다. `if __name__ == "__main__":` 아래 코드는 직접 실행할 때만 동작하므로 테스트에서 클래스를 가져와도 메뉴가 실행되지 않습니다.
 
+## 꼭 알아야 할 함수·메서드
+
+함수는 특정 작업을 묶은 코드이며 클래스 안에 정의된 함수는 **메서드**라고 합니다. 아래는 이 프로젝트의 입력, 정답 판정, 상태 저장을 이해하는 데 중요한 순서로 골랐습니다.
+
+### 직접 만든 함수와 메서드
+
+| 이름 | 역할 | 꼭 이해할 점 |
+|---|---|---|
+| `Quiz.__init__()` | 문제·선택지·정답을 객체에 저장 | self는 현재 객체, __init__은 초기 상태 설정 |
+| `get_number() / get_menu_choice()` | 숫자를 검사하고 유효한 int 반환 | 정답은 1~4, 메뉴는 1~5 · 잘못된 입력은 반복 |
+| `get_text()` | 앞뒤 공백을 제거한 문자열 반환 | 빈 문자열이면 안내 후 다시 입력받음 |
+| `Quiz.check_answer()` | 답을 비교해 True 또는 False 반환 | 출력과 반환은 다름 · return 값으로 분기 |
+| `QuizGame.play()` | 무작위 출제·정답 수 계산·최고점 갱신 | 빈 목록은 바로 return · 완료 후 저장 |
+| `save_state() / load_state()` | 객체 ↔ JSON 변환 및 파일 입출력 | load_state는 (퀴즈 목록, 최고 점수) 두 값 반환 |
+| `validate_state()` | 파일 데이터의 자료형·범위 검사 | 통과 시 별도 반환값 없음(None) · 오류는 raise |
+| `QuizGame.run()` | 메뉴 반복과 기능 연결·안전 종료 | try/except/finally로 중단 시에도 저장 시도 |
+
+`play_quiz()`는 문제 하나를 출력하고 입력을 받아 정오답 결과를 반환하며, `QuizGame.play()`는 전체 문제를 진행합니다. `QuizGame.save()`와 `load()`는 게임 객체의 데이터를 파일 처리 함수에 연결하는 메서드입니다.
+
+### 파이썬 기본 기능과 표준 라이브러리
+
+| 이름 | 사용하는 곳 | 주의할 점 |
+|---|---|---|
+| `input() → strip() → int()` | 입력받기 → 공백 제거 → 정수 변환 | input은 문자열 반환 · int 변환 실패는 ValueError |
+| `len() / enumerate(..., start=1)` | 문제 수 계산 / 번호와 항목 순회 | enumerate는 (번호, 항목)을 차례로 제공 |
+| `append() / copy()` | 문제 추가 / 출제용 목록 복사 | append는 원본 수정 · copy는 새 목록(얕은 복사) |
+| `random.shuffle()` | 복사한 목록의 순서를 제자리에서 섞음 | 보너스 과제 · 반환값은 None |
+| `round()` | 정답 비율을 정수 점수로 반올림 | 현재 식: round(정답 수 / 전체 수 * 100) |
+| `open() / json.load() / json.dump()` | 파일 열기 / JSON 읽기 / JSON 쓰기 | with로 파일 닫기 · UTF-8 · load는 경로가 아닌 파일을 받음 |
+| `isinstance() / type()` | 자료형 검사 | 정답·점수는 type(x) is int로 bool도 제외 |
+| `Path.resolve() / Path.rename()` | 절대 경로 계산 / 손상 파일 이름 변경 | main.py 위치에 저장 · rename은 복사가 아닌 이동 |
+
+`copy()`는 목록만 복사하고 각 Quiz 객체는 공유하는 **얕은 복사**입니다. 이 프로젝트는 목록 순서만 섞으므로 충분합니다. `random.shuffle()`의 반환값을 변수에 대입하면 `None`이 되므로 주의합니다.
+
+```python
+play_order = self.quizzes.copy()
+random.shuffle(play_order)  # 반환값을 대입하지 않는다
+for current_quiz in play_order:
+    result = play_quiz(current_quiz)
+```
+
+핵심 호출 흐름은 다음과 같습니다.
+
+```text
+시작 → game.load() → load_state() → validate_state()
+     → game.run() → get_menu_choice()
+       → game.play() → play_quiz() → Quiz.check_answer()
+       → game.save() → save_state() → json.dump()
+```
+
+`print()`는 화면에 표시하고 `return`은 호출한 코드에 값을 돌려줍니다. `return`, `with`, `try`, `except`, `finally`, `raise`는 함수 이름이 아닌 파이썬 문법입니다. `round()`는 정확히 중간인 값에서 짝수 쪽으로 반올림합니다(예: `round(12.5)`는 12).
+
 ## state.json 설명
 
 프로젝트 루트에 UTF-8로 저장합니다. 다음은 구조를 보여 주는 **문제 1개짜리 예시**이며 기본 문제는 5개입니다.
