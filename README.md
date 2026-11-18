@@ -75,125 +75,291 @@ E1-2/
 
 입력 검사와 파일 처리를 게임 진행에서 분리해 저장 형식 변경이 정답 판정 코드에 영향을 덜 주게 했습니다. `if __name__ == "__main__":` 아래 코드는 직접 실행할 때만 동작하므로 테스트에서 클래스를 가져와도 메뉴가 실행되지 않습니다.
 
-## 이 과제에서 꼭 이해할 개념
+## 과제 코드로 이해하는 핵심 개념
 
-목표는 동작하는 코드를 만드는 것뿐 아니라 **왜 이렇게 동작하는지 자신의 말로 설명하는 것**입니다. 아래 다섯 묶음을 먼저 이해하고, 각 확인 질문을 코드와 연결해 설명해 보세요.
+각 예제는 실제 `main.py`에서 발췌했습니다. 입력 예시를 코드에 넣어 따라가며 결과를 확인하세요. 아래 실행 흐름은 이해를 위한 예시입니다.
 
-### 자료형·입력·실행 흐름
-
-- **변수와 자료형**: 변수는 값을 참조하는 이름입니다. 문제는 str, 정답 번호는 int, 정답 여부는 bool, 문제 모음은 list, JSON으로 저장할 문제 정보는 dict로 다룹니다. input()은 숫자를 입력해도 str을 반환하므로 int() 변환이 필요합니다.
-- **조건과 반복**: if/elif/else는 조건에 따라 한 경로를 선택합니다. while은 메뉴·재입력을 반복하고, for는 퀴즈 목록을 하나씩 순회합니다. break는 가장 가까운 반복문을 끝내고, continue는 다음 반복으로 이동하며, return은 함수 전체를 끝냅니다.
-- **함수의 입력과 반환**: 매개변수는 함수가 받을 값의 이름이고 인자는 호출할 때 전달하는 실제 값입니다. print는 화면에 표시하고 return은 호출한 코드에 값을 돌려줍니다. check_answer의 bool 반환값이 정답 수 증가 여부를 결정합니다.
-- **들여쓰기와 유효 범위**: 들여쓰기가 코드 묶음을 결정합니다. 이 프로젝트는 공백 4칸을 사용합니다. 함수 안의 correct_count 같은 지역 변수와 객체에 보관하는 self.best_score의 역할을 구분해야 합니다.
-
-**확인 질문:** input으로 받은 "2"와 정수 2는 왜 구분해야 할까요? break와 return을 바꾸면 어떤 범위까지 종료될까요?
-
-### 클래스·객체·상태
-
-- **클래스와 객체**: Quiz는 문제를 만드는 설계이고 Quiz(...)로 만든 각각의 값은 객체입니다. QuizGame은 퀴즈 목록과 최고 점수를 관리합니다. 클래스를 쓰는 이유는 관련 데이터와 동작을 묶고 같은 코드를 재사용하기 위해서입니다.
-- **__init__과 self**: __init__은 새 객체의 초기 상태를 설정합니다. self는 메서드가 동작하는 현재 객체입니다. self.question은 그 객체의 속성이고 display()는 동작을 표현하는 메서드입니다.
-- **상태와 None**: 지역 변수 correct_count는 한 번의 플레이 정답 수입니다. self.best_score는 여러 플레이 동안 유지되는 상태입니다. None은 아직 플레이하지 않았다는 뜻이고, 0은 플레이했지만 전부 틀렸다는 뜻입니다.
-- **참조와 얕은 복사**: b = a는 같은 목록을 가리키므로 b를 섞으면 a의 순서도 바뀝니다. a.copy()는 새 목록을 만들지만 내부 Quiz 객체는 공유합니다. 출제 순서만 섞는 이번 기능에는 이 얕은 복사로 충분합니다.
-
-**확인 질문:** 퀴즈마다 질문이 다른 이유를 self로 설명할 수 있나요? 최고 점수를 0으로 초기화하면 어떤 정보를 잃을까요?
-
-### 파일 저장·검증·예외
-
-- **메모리와 영속성**: 메모리 속 퀴즈와 점수는 프로세스 종료 후 남지 않습니다. state.json에 기록하고 다음 실행 때 불러와야 데이터가 유지됩니다. JSON 저장을 성공해야 메모리의 변경이 파일에도 반영됩니다.
-- **직렬화와 역직렬화**: Quiz 객체를 그대로 JSON에 저장하지 않고 dict와 list로 바꾼 뒤 json.dump로 기록합니다. json.load로 읽은 dict를 다시 Quiz 객체로 만듭니다. 이 변환을 각각 직렬화·역직렬화 과정으로 이해할 수 있습니다.
-- **문법 검사와 값 검사**: JSON으로 읽힌다고 게임에서 쓸 수 있는 데이터라는 뜻은 아닙니다. 정답이 9이거나 선택지가 3개일 수도 있어 validate_state로 자료형과 범위를 검사합니다. UTF-8은 한글을 읽고 쓰는 인코딩입니다.
-- **예외와 안전 종료**: try는 오류가 날 수 있는 작업, except는 해당 오류의 대응, finally는 흐름을 벗어날 때 정리 작업입니다. Ctrl+C는 KeyboardInterrupt, 입력 종료는 EOFError입니다. 강제 프로세스 종료·전원 차단까지 finally 실행을 보장하지는 않습니다.
-
-**확인 질문:** 손상 파일을 보관하는 것과 정상 데이터를 복원하는 것은 어떻게 다를까요? 저장에 실패한 뒤 성공했다고 안내하면 왜 안 될까요?
-
-### Git의 저장·병합·동기화
-
-- **파일 저장과 커밋**: 편집기의 저장은 작업 파일을 바꿉니다. git add는 다음 커밋에 넣을 내용을 스테이징하고, git commit은 로컬 이력으로 기록합니다. push 전에는 그 커밋이 GitHub에 없을 수 있습니다.
-- **브랜치와 병합**: 브랜치는 커밋을 가리키는 이름입니다. checkout으로 main에 돌아오는 것만으로 작업 브랜치의 변경이 합쳐지지 않습니다. merge가 변경 이력을 합치며 --no-ff는 fast-forward 가능한 상황에도 병합 커밋을 남깁니다.
-- **clone·push·pull**: clone은 저장소를 처음 복제하고, push는 로컬 커밋을 원격에 반영합니다. pull은 원격 변경을 가져와 현재 브랜치에 통합합니다. pull --ff-only는 분기된 이력을 자동 병합하지 않고 실패하게 제한합니다.
-- **충돌과 증거**: 충돌은 같은 부분의 변경을 Git이 자동으로 합칠 수 없는 상황입니다. 내용을 확인해 원하는 결과로 수정하고 add·commit합니다. git status는 현재 변경 상태, git log --graph는 커밋과 병합 흐름을 보여줍니다.
-
-**확인 질문:** 파일 저장·commit·push의 차이를 설명할 수 있나요? 작업 브랜치에서 커밋 후 main만 push하면 작업 내용이 올라갈까요?
-
-### 보너스 랜덤·검증·성능
-
-- **보너스 과제: 랜덤 출제**: random.shuffle은 목록 자체의 순서를 바꾸며 반환값은 None입니다. 원본 목록을 복사한 후 섞어 목록 보기와 저장 순서를 보존합니다. 무작위라는 말은 매번 다른 순서를 보장한다는 뜻이 아닙니다.
-- **점수와 경계 조건**: 점수는 round(정답 수 / 전체 수 * 100)입니다. 문제 수가 0이면 먼저 반환해 0으로 나누기를 막습니다. 첫 0점, 빈 입력, 잘못된 번호, 파일 없음처럼 경계 상황을 따로 확인해야 합니다.
-- **테스트와 모의 오류**: 정상 실행뿐 아니라 재실행 후 데이터 유지·낮은 점수에서 최고점 유지·손상 파일도 확인합니다. mock은 권한 오류처럼 재현하기 어려운 조건을 대신 발생시킵니다. mock 테스트와 실제 OS 권한 실험은 다른 증거입니다.
-- **측정과 복잡도**: 전체 문제를 순회하는 작업은 문제 크기가 비슷하다는 조건에서 O(n)입니다. 실측 시간에는 파일 캐시와 고정 비용도 영향을 줍니다. 테스트 14개 통과가 모든 오류의 부재를 보장하지는 않습니다.
-
-**확인 질문:** shuffle의 반환값을 play_order에 대입하면 무엇이 들어갈까요? 원본 순서 보존과 문제 누락 여부를 어떻게 확인할까요?
-
-### 핵심 코드로 연결하기
+### 1. 입력한 2는 아직 숫자가 아니다
 
 ```python
-# 문자열을 검사하고 정수로 변환한다.
-number = int(input("정답 번호: ").strip())
-
-# 원본 목록은 유지하고 출제 순서만 바꾼다. (보너스 과제)
-play_order = self.quizzes.copy()
-random.shuffle(play_order)
-
-# 반환된 bool 값으로 게임 상태를 갱신한다.
-if current_quiz.check_answer(number):
-    correct_count += 1
+number = int(input(prompt).strip())
 ```
 
-첫 줄에서 숫자 변환에 실패하면 ValueError가 발생하므로 실제 입력 함수는 try/except와 반복문으로 처리합니다. 이 예시는 개념 연결을 위한 발췌이며 전체 실행 코드는 main.py를 참고합니다.
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| input(prompt) | " 2 " · str |
+| strip() | "2" · str |
+| int(...) | 2 · int |
 
-**복습 순서:** 자료형·조건·반복 → 함수의 입력·반환 → 객체와 상태 → 파일 저장·예외 → Git 흐름 → 보너스 랜덤과 테스트.
+**문자열 → 공백 제거 → 정수 변환**
 
-## 꼭 알아야 할 함수·메서드
+int("abc")는 ValueError. 다음 페이지의 except로 이동합니다.
 
-함수는 특정 작업을 묶은 코드이며 클래스 안에 정의된 함수는 **메서드**라고 합니다. 아래는 이 프로젝트의 입력, 정답 판정, 상태 저장을 이해하는 데 중요한 순서로 골랐습니다.
-
-### 직접 만든 함수와 메서드
-
-| 이름 | 역할 | 꼭 이해할 점 |
-|---|---|---|
-| `Quiz.__init__()` | 문제·선택지·정답을 객체에 저장 | self는 현재 객체, __init__은 초기 상태 설정 |
-| `get_number() / get_menu_choice()` | 숫자를 검사하고 유효한 int 반환 | 정답은 1~4, 메뉴는 1~5 · 잘못된 입력은 반복 |
-| `get_text()` | 앞뒤 공백을 제거한 문자열 반환 | 빈 문자열이면 안내 후 다시 입력받음 |
-| `Quiz.check_answer()` | 답을 비교해 True 또는 False 반환 | 출력과 반환은 다름 · return 값으로 분기 |
-| `QuizGame.play()` | 무작위 출제·정답 수 계산·최고점 갱신 | 빈 목록은 바로 return · 완료 후 저장 |
-| `save_state() / load_state()` | 객체 ↔ JSON 변환 및 파일 입출력 | load_state는 (퀴즈 목록, 최고 점수) 두 값 반환 |
-| `validate_state()` | 파일 데이터의 자료형·범위 검사 | 통과 시 별도 반환값 없음(None) · 오류는 raise |
-| `QuizGame.run()` | 메뉴 반복과 기능 연결·안전 종료 | try/except/finally로 중단 시에도 저장 시도 |
-
-`play_quiz()`는 문제 하나를 출력하고 입력을 받아 정오답 결과를 반환하며, `QuizGame.play()`는 전체 문제를 진행합니다. `QuizGame.save()`와 `load()`는 게임 객체의 데이터를 파일 처리 함수에 연결하는 메서드입니다.
-
-### 파이썬 기본 기능과 표준 라이브러리
-
-| 이름 | 사용하는 곳 | 주의할 점 |
-|---|---|---|
-| `input() → strip() → int()` | 입력받기 → 공백 제거 → 정수 변환 | input은 문자열 반환 · int 변환 실패는 ValueError |
-| `len() / enumerate(..., start=1)` | 문제 수 계산 / 번호와 항목 순회 | enumerate는 (번호, 항목)을 차례로 제공 |
-| `append() / copy()` | 문제 추가 / 출제용 목록 복사 | append는 원본 수정 · copy는 새 목록(얕은 복사) |
-| `random.shuffle()` | 복사한 목록의 순서를 제자리에서 섞음 | 보너스 과제 · 반환값은 None |
-| `round()` | 정답 비율을 정수 점수로 반올림 | 현재 식: round(정답 수 / 전체 수 * 100) |
-| `open() / json.load() / json.dump()` | 파일 열기 / JSON 읽기 / JSON 쓰기 | with로 파일 닫기 · UTF-8 · load는 경로가 아닌 파일을 받음 |
-| `isinstance() / type()` | 자료형 검사 | 정답·점수는 type(x) is int로 bool도 제외 |
-| `Path.resolve() / Path.rename()` | 절대 경로 계산 / 손상 파일 이름 변경 | main.py 위치에 저장 · rename은 복사가 아닌 이동 |
-
-`copy()`는 목록만 복사하고 각 Quiz 객체는 공유하는 **얕은 복사**입니다. 이 프로젝트는 목록 순서만 섞으므로 충분합니다. `random.shuffle()`의 반환값을 변수에 대입하면 `None`이 되므로 주의합니다.
+### 2. 잘못 입력하면 어디로 돌아갈까?
 
 ```python
-play_order = self.quizzes.copy()
-random.shuffle(play_order)  # 반환값을 대입하지 않는다
+def get_number(prompt):
+    while True:
+        try:
+            number = int(input(prompt).strip())
+        except ValueError:
+            print("숫자를 입력해 주세요.")
+            continue
+
+        if number in [1, 2, 3, 4 ]:
+            return number
+
+        print("1~4 사이의 번호를 입력해주세요")
+```
+
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| abc 입력 | except → 안내 → continue → 다시 입력 |
+| 9 입력 | 변환 성공 → 범위 검사 실패 → 다시 입력 |
+| 2 입력 | 범위 검사 통과 → return 2 → 함수 종료 |
+
+**continue는 반복의 다음 회차, return은 함수 종료**
+
+입력 3가지를 각각 따라가며 while의 시작점과 return 위치를 찾으세요.
+
+### 3. 빈 문제는 왜 등록되지 않을까?
+
+```python
+def get_text(prompt):
+    while True:
+        text = input(prompt).strip()
+
+        if text:
+            return text
+
+        print("내용을 입력해주세요.")
+```
+
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| 공백만 입력 | "   ".strip() → "" |
+| if text | 빈 문자열은 False → 안내 후 반복 |
+| 내용 입력 | "문제" → True → return text |
+
+**빈 문자열은 조건식에서 False**
+
+strip은 원래 문자열을 고치는 것이 아니라 공백을 제거한 문자열을 반환합니다.
+
+### 4. 문제 하나를 객체로 묶기
+
+```python
+class Quiz: #문제의 정보를 관리하는 클래스
+    def __init__(self, question, choices, answer):
+        self.question = question
+        self.choices = choices
+        self.answer = answer
+```
+
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| Quiz("현재 위치?", ["ls", "pwd", "cd", "mkdir"], 2) | 새 Quiz 객체 생성 |
+| __init__의 self | 지금 생성한 퀴즈 객체 |
+| self.answer = answer | 이 객체의 정답 속성에 2 저장 |
+
+**클래스는 구조, 객체는 실제 문제 하나**
+
+같은 클래스로 두 객체를 만들면 각 객체가 자신의 질문과 정답을 가집니다.
+
+### 5. 번호와 선택지가 함께 나오는 이유
+
+```python
+for number, choice in enumerate(self.choices, start=1):
+    print(f"{number}. {choice}")
+```
+
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| choices = ["ls", "pwd", "cd", "mkdir"] | 선택지 목록 예시 |
+| 첫 반복 | number=1, choice="ls" → 1. ls |
+| 두 번째 반복 | number=2, choice="pwd" → 2. pwd |
+
+**enumerate는 번호와 항목을 함께 제공**
+
+start=1은 화면 번호입니다. 파이썬 리스트의 첫 인덱스는 여전히 0입니다.
+
+### 6. 정답 비교는 값을 돌려준다
+
+```python
+def check_answer(self, user_answer):
+    return user_answer == self.answer
+```
+
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| 정답 속성 self.answer = 2 | 객체에 저장된 정답 |
+| check_answer(2) | 2 == 2 → True 반환 |
+| check_answer(1) | 1 == 2 → False 반환 |
+
+**return True와 print("정답")는 다르다**
+
+이 메서드는 출력하지 않습니다. 반환된 bool을 play_quiz가 받아 정오답 안내를 합니다.
+
+### 7. True가 점수로 바뀌는 순간
+
+```python
 for current_quiz in play_order:
     result = play_quiz(current_quiz)
+
+    if result:
+        correct_count += 1
 ```
 
-핵심 호출 흐름은 다음과 같습니다.
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| correct_count = 0 | 플레이 시작 때 정답 수 초기화 |
+| result = True | if 통과 → correct_count가 1 증가 |
+| result = False | 증가 코드를 건너뜀 |
 
-```text
-시작 → game.load() → load_state() → validate_state()
-     → game.run() → get_menu_choice()
-       → game.play() → play_quiz() → Quiz.check_answer()
-       → game.save() → save_state() → json.dump()
+**지역 변수에 한 번의 게임 결과를 누적**
+
+current_quiz는 Quiz 객체이고 result는 bool입니다. 같은 변수로 착각하지 마세요.
+
+### 8. 처음 받은 0점도 기록해야 한다
+
+```python
+score = round(correct_count / len(self.quizzes) * 100)
+print(f"이번 점수: {score}점")
+
+if self.best_score is None or score > self.best_score:
+    self.best_score = score
+    print("최고 점수가 갱신되었습니다!")
 ```
 
-`print()`는 화면에 표시하고 `return`은 호출한 코드에 값을 돌려줍니다. `return`, `with`, `try`, `except`, `finally`, `raise`는 함수 이름이 아닌 파이썬 문법입니다. `round()`는 정확히 중간인 값에서 짝수 쪽으로 반올림합니다(예: `round(12.5)`는 12).
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| 4개 정답 / 5문제 | round(4 / 5 * 100) → 80 |
+| best_score=None, score=0 | 미플레이 조건이 True → 최고 점수 0 기록 |
+| best_score=80, score=60 | 두 조건 모두 False → 80 유지 |
+
+**None은 미플레이, 0은 실제 점수**
+
+or는 왼쪽이 True이면 오른쪽 비교를 생략합니다. 그래서 None과 숫자를 비교하지 않습니다.
+
+### 9. 보너스 과제: 복사한 목록만 섞기
+
+```python
+play_order = self.quizzes.copy()
+random.shuffle(play_order)
+```
+
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| 원본 self.quizzes | [문제A, 문제B, 문제C] |
+| copy → shuffle 후 예시 | play_order: [문제C, 문제A, 문제B] |
+| 원본 목록 | self.quizzes: [문제A, 문제B, 문제C] 유지 |
+
+**새 목록을 만들고 그 순서만 무작위로 변경**
+
+얕은 복사이므로 내부 Quiz 객체는 공유합니다. shuffle의 반환값은 None이며 같은 순서가 다시 나올 수도 있습니다.
+
+### 10. 객체를 JSON에 저장할 모양으로 바꾸기
+
+```python
+for quiz in quizzes:
+    quiz_data.append({
+        "question": quiz.question,
+        "choices": quiz.choices,
+        "answer": quiz.answer
+
+    })
+data = {
+    "quizzes": quiz_data,
+    "best_score": best_score
+}
+```
+
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| quiz.question / quiz.answer | 객체의 속성을 읽음 |
+| quiz_data.append({...}) | 딕셔너리를 목록에 추가 |
+| data의 quizzes / best_score | 문제 목록과 최고 점수를 하나로 묶음 |
+
+**Quiz 객체 → dict와 list → JSON**
+
+json.dump는 이렇게 만든 data를 파일에 씁니다. json.load로 읽은 딕셔너리는 load_state에서 다시 Quiz 객체로 만듭니다.
+
+### 11. 파일을 열고 한글 데이터를 쓰기
+
+```python
+with open(STATE_FILE, "w", encoding="utf-8") as file:
+    json.dump(data, file, ensure_ascii=False, indent=4)
+```
+
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| open(..., "w") | 파일을 쓰기 모드로 열기 |
+| json.dump(data, file, ...) | dict/list를 JSON 텍스트로 기록 |
+| with 블록 종료 | 파일 닫기 |
+
+**메모리의 값은 저장에 성공해야 파일에 남는다**
+
+ensure_ascii=False는 한글을 읽기 쉽게, indent=4는 들여쓰기를 지정합니다. "w"는 기존 파일을 덮어씁니다.
+
+### 12. 읽힌 JSON이 올바른 퀴즈라는 보장은 없다
+
+```python
+answer = item.get("answer")
+if type(answer) is not int or not 1 <= answer <= 4:
+    raise ValueError("정답 번호는 1~4 사이의 정수여야 합니다.")
+```
+
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| answer=2 | 정수이고 1~4 → 통과 |
+| answer=9 또는 "2" | 범위 또는 자료형 오류 → raise ValueError |
+| answer=True | type(True)는 bool → 정수 조건에서 제외 |
+
+**JSON 읽기 성공과 게임 데이터 검증은 별개**
+
+발생한 ValueError는 load_state의 except에서 처리합니다. 손상 원본을 보관한 뒤 기본 퀴즈로 시작합니다.
+
+### 13. Ctrl+C를 누르면 저장은 누가 할까?
+
+```python
+except KeyboardInterrupt:
+    print("\nCtrl+C로 종료를 요청했습니다.")
+
+except EOFError:
+    print("\n입력이 종료되어 게임을 종료합니다.")
+
+finally:
+    self.save()
+    print(">>게임을 종료합니다.")
+```
+
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| Ctrl+C | KeyboardInterrupt → 안내 |
+| Ctrl+D / 입력 종료 | EOFError → 안내 |
+| finally | self.save() → 종료 안내 |
+
+**종료 경로를 한곳에서 정리한다**
+
+이 코드는 QuizGame.run의 끝부분입니다. finally도 강제 프로세스 종료나 전원 차단까지 보장하지는 않습니다.
+
+### 14. 프로그램은 이 세 줄에서 시작한다
+
+```python
+if __name__ == "__main__":
+    game = QuizGame(quizzes, None)
+    game.load()
+    game.run()
+```
+
+| 코드에 넣을 값 / 시점 | 실행 결과 |
+|---|---|
+| QuizGame(quizzes, None) | 기본 문제와 미플레이 점수로 객체 생성 |
+| game.load() | 파일을 읽어 게임 상태 복원 |
+| game.run() | 메뉴 반복 시작 |
+
+**직접 실행할 때만 시작 코드를 수행**
+
+테스트에서 import main을 해도 이 블록은 실행되지 않아, 메뉴 입력을 기다리지 않고 함수를 검사할 수 있습니다.
 
 ## state.json 설명
 
