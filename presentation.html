@@ -496,29 +496,15 @@ quiz.display()</pre></div><div class="panel"><div class="phead">quiz.display()�
         <span class="s-kicker">04 · oop</span>
         <h2 class="s-title">두 개의 클래스로 책임을 나눈다</h2>
       </div>
-      <div class="two-col">
-        <div class="grid" style="gap:12px">
-          <div class="card data">
-            <div style="display:flex;align-items:center;gap:8px"><span class="chip ac">class Quiz</span></div>
-            <p style="margin-top:9px">문제 하나의 정보(<code>question</code>, <code>choices</code>, <code>answer</code>)를 담고,
-              <code>display()</code>로 출력, <code>check_answer()</code>로 정답을 확인합니다.</p>
-          </div>
-          <div class="card process">
-            <div style="display:flex;align-items:center;gap:8px"><span class="chip ac">class QuizGame</span></div>
-            <p style="margin-top:9px">퀴즈 목록과 최고 점수를 속성으로 두고, 메뉴·플레이·추가·목록·점수·저장·불러오기·종료를 메서드로 관리합니다.</p>
-          </div>
+      <div class="grid cols-2">
+        <div class="card data">
+          <div style="display:flex;align-items:center;gap:8px"><span class="chip ac">class Quiz</span></div>
+          <p style="margin-top:9px">문제 하나의 정보(<code>question</code>, <code>choices</code>, <code>answer</code>)를 담고,
+            <code>display()</code>로 출력하고 <code>check_answer()</code>로 정답을 확인합니다.</p>
         </div>
-        <div class="panel">
-          <div class="phead"><span>main.py</span><span>Quiz</span></div>
-<pre>class Quiz:
-    def __init__(self, question, choices, answer):
-        self.question = question
-        self.choices  = choices
-        self.answer   = answer
-
-    def display(self):   ...
-    def check_answer(self, user_answer):
-        return user_answer == self.answer</pre>
+        <div class="card process">
+          <div style="display:flex;align-items:center;gap:8px"><span class="chip ac">class QuizGame</span></div>
+          <p style="margin-top:9px">퀴즈 목록과 최고 점수를 속성으로 두고, 메뉴·플레이·추가·목록·점수·저장·불러오기·종료를 메서드로 관리합니다.</p>
         </div>
       </div>
       <p class="note">여러 <code>Quiz</code> 객체가 같은 출력·정답 확인 코드를 재사용하고, <code>QuizGame</code>이 전체 게임 상태를 관리합니다. 관련 데이터와 동작을 묶기 위해 클래스를 선택했습니다.</p>
