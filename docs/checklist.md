@@ -4,13 +4,13 @@
 
 | AI 평가 항목 | 구현 또는 증거 |
 |---|---|
-| 1. 전체 메뉴 기능 | main.py의 QuizGame, execution.md |
+| 1. 전체 메뉴 기능 | main.py의 QuizGame, execution.md, 메뉴·기능별 실제 스크린샷 |
 | 2. 정오답·입력 검사 | Quiz, 입력 함수, validation.md |
 | 3. 재실행 데이터 유지 | 저장/불러오기, 재실행 테스트와 실행 기록 |
 | 4. 기본 퀴즈 5개 이상 | main.py의 기본 목록 5개, README |
-| 5. 원격 업로드·커밋 10개 이상 | environment.md의 원격·커밋 로그 |
-| 6. 브랜치·병합 | environment.md의 그래프, 실제 merge 커밋 |
-| 7. clone·pull | git-practice.md의 실제 실습 기록 |
+| 5. 원격 업로드·커밋 10개 이상 | README와 environment.md의 c7e05ac 기준 86개 이력 스냅샷 및 실제 커밋 출력 |
+| 6. 브랜치·병합 | README와 environment.md의 `git log --graph`, 실제 merge 커밋 |
+| 7. clone·pull | git-practice.md의 GitHub 실습 기록과 screenshots/git-workflow.png의 실제 터미널 캡처 |
 | 8. 클래스 책임 | README의 클래스·함수 책임 |
 | 9. 입력·진행·파일 처리 분리 | README와 main.py |
 | 10. 입출력 시점·순서 | README의 불러오기·저장 순서 |
@@ -27,6 +27,6 @@
 
 - 저장소: https://github.com/tikita12/E1-2 / main
 - 환경·실행·Git 그래프 텍스트 증거: docs의 각 문서
-- **실제 콘솔 스크린샷 6장 첨부 완료**: screenshots/README.md에서 확인
+- **실제 콘솔·Git 스크린샷 7장 첨부 완료**: screenshots/README.md에서 확인
 
 손상 파일 보관은 이전 정상 버전으로 자동 복원하는 기능과 다르다. 정상 파일의 주기적 백업·원자적 저장은 구현하지 않았으며 README에 한계를 명시했다.
